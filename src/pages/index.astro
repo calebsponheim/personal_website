@@ -1,17 +1,128 @@
 ---
-import Welcome from "../components/Welcome.astro";
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import portrait from "../assets/portrait.webp";
 ---
 
-<body>
-	<a href="/">Home</a>
-	<a href="/about/">About</a>
-	<a href="/blog/">Blog</a>
+<Layout title="Caleb Sponheim">
+    <main>
+        <Image
+            src={portrait}
+            alt="Portrait of Caleb Sponheim"
+            widths={[200, 400, 600]}
+            sizes="(min-width: 720px) 224px, 60vw"
+            class="portrait"
+        />
 
-	<Layout>
-		<Welcome />
-	</Layout>
-</body>
+        <div class="content">
+            <h1>Caleb Sponheim, PhD</h1>
+
+            <p>
+                I am an applied researcher and AI expert currently working as a
+                Senior Experience Specialist and AI Lead at
+                <a href="https://www.nngroup.com/people/caleb-sponheim/">NN/G</a>. I
+                communicate complex topics, conduct empirical research, and build AI
+                systems. I pride myself on helping people through practical,
+                skeptical, and grounded teaching.
+            </p>
+
+            <p>
+                I've been cited as an expert on AI in publications including
+                <a href="https://time.com/7346052/problem-ai-flattering-us/">Time</a>,
+                <a href="https://www.axios.com/2025/07/07/ai-sycophancy-chatbots-mental-health">Axios</a>,
+                <a href="https://futurism.com/sycophancy-chatbots-ai-problem">Futurism</a>, and
+                <a href="https://www.cnet.com/tech/services-and-software/apples-genmoji-might-be-a-prompt-engineering-training-tool-in-disguise/">CNET</a>.
+            </p>
+
+            <p class="contact">
+                <strong>Want to get in touch?</strong>
+                If you have an opportunity or introduction, shoot me a line at
+                <em>caleb [dot] sponheim [at] gmail.com</em>. I will respond to
+                messages that are a good match for my schedule and interests.
+                Thanks!
+            </p>
+
+            <p>
+                <a
+                    class="cta"
+                    href="https://docs.google.com/document/d/1rlU65uZEFFuvl20uaJZzaqjlPQYRzaJCtwfJ5-daZaM/edit?usp=sharing"
+                >
+                    See Caleb's Resume →
+                </a>
+            </p>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    main {
+        max-width: 52rem;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+        font-family:
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            sans-serif;
+        line-height: 1.6;
+        color: #1a1a1a;
+
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "portrait"
+            "content";
+        gap: 2rem;
+    }
+
+    @media (min-width: 720px) {
+        main {
+            grid-template-columns: minmax(0, 1fr) 14rem;
+            grid-template-areas: "content portrait";
+            gap: 3rem;
+            align-items: start;
+        }
+    }
+
+    .portrait {
+        grid-area: portrait;
+        width: 12rem;
+        height: auto;
+        justify-self: center;
+    }
+
+    .content {
+        grid-area: content;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+        margin: 0 0 1.5rem;
+        letter-spacing: -0.02em;
+    }
+
+    p {
+        margin: 0 0 1.25rem;
+    }
+
+    a {
+        color: #3b3bbf;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    .contact strong {
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .cta {
+        display: inline-block;
+        margin-top: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        border-bottom: 1px solid currentColor;
+    }
+</style>

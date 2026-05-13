@@ -22,3 +22,12 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# squarespace migration scratch space
+squarespace-mirror/
+
+# playwright outputs
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/blob-report/

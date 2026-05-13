@@ -9,9 +9,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "pw:codegen": "playwright codegen http://localhost:4321"
   },
   "dependencies": {
     "astro": "^6.1.9"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
   }
 }
