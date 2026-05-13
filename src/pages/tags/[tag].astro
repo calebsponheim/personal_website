@@ -1,0 +1,131 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { tagSlug } from "../../utils/tags";
+
+// Pre-render one page per unique tag at build time. Each page receives
+// the tag's display name and the filtered, sorted list of posts.
+export async function getStaticPaths() {
+    const allPosts = await getCollection("blog", ({ data }) => {
+        return import.meta.env.DEV || !data.draft;
+    });
+
+    const tagMap = new Map<
+        string,
+        { displayName: string; posts: CollectionEntry<"blog">[] }
+    >();
+    for (const post of allPosts) {
+        for (const tag of post.data.tags ?? []) {
+            const slug = tagSlug(tag);
+            if (!tagMap.has(slug)) {
+                tagMap.set(slug, { displayName: tag, posts: [] });
+            }
+            tagMap.get(slug)!.posts.push(post);
+        }
+    }
+
+    return Array.from(tagMap.entries()).map(([slug, { displayName, posts }]) => ({
+        params: { tag: slug },
+        props: {
+            displayName,
+            posts: posts.sort(
+                (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+            ),
+        },
+    }));
+}
+
+type Props = {
+    displayName: string;
+    posts: CollectionEntry<"blog">[];
+};
+const { displayName, posts } = Astro.props;
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+});
+---
+
+<Layout
+    title={`#${displayName} · Caleb Sponheim`}
+    description={`Posts tagged ${displayName}.`}
+>
+    <p class="breadcrumbs">
+        <a href="/tags">← All tags</a>
+    </p>
+    <h1>#{displayName}</h1>
+    <p class="post-count">
+        {posts.length} {posts.length === 1 ? "post" : "posts"}
+    </p>
+
+    <ul class="post-list">
+        {
+            posts.map((post) => (
+                <li class="post-item">
+                    <a href={`/blog/${post.id}/`}>
+                        <h2>{post.data.title}</h2>
+                        <p class="post-meta">
+                            <time datetime={post.data.pubDate.toISOString()}>
+                                {dateFormatter.format(post.data.pubDate)}
+                            </time>
+                        </p>
+                        {post.data.description && (
+                            <p class="post-description">
+                                {post.data.description}
+                            </p>
+                        )}
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</Layout>
+
+<style>
+    .breadcrumbs {
+        margin: 0 0 1rem;
+        font-size: 0.9rem;
+    }
+
+    .post-count {
+        color: var(--color-text-muted);
+        margin: 0 0 2rem;
+    }
+
+    .post-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .post-item a {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .post-item h2 {
+        margin: 0 0 0.25rem;
+        color: var(--color-link);
+    }
+
+    .post-item a:hover h2 {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .post-meta {
+        margin: 0 0 0.5rem;
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+    }
+
+    .post-description {
+        margin: 0;
+    }
+</style>

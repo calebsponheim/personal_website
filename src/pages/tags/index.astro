@@ -1,0 +1,84 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { tagSlug } from "../../utils/tags";
+
+const allPosts = await getCollection("blog", ({ data }) => {
+    return import.meta.env.DEV || !data.draft;
+});
+
+// Build a map from slug → { displayName, count }. Using slug as the key
+// (not the raw tag string) means tags like "Learning In Public" and
+// "learning in public" collapse into one bucket.
+const tagMap = new Map<string, { displayName: string; count: number }>();
+for (const post of allPosts) {
+    for (const tag of post.data.tags ?? []) {
+        const slug = tagSlug(tag);
+        const existing = tagMap.get(slug);
+        if (existing) {
+            existing.count += 1;
+        } else {
+            tagMap.set(slug, { displayName: tag, count: 1 });
+        }
+    }
+}
+
+const sortedTags = Array.from(tagMap.entries()).sort(
+    (a, b) => b[1].count - a[1].count,
+);
+---
+
+<Layout
+    title="Tags · Caleb Sponheim"
+    description="Browse blog posts by topic."
+>
+    <h1>Tags</h1>
+    {
+        sortedTags.length === 0 ? (
+            <p>No tags yet.</p>
+        ) : (
+            <ul class="tag-cloud">
+                {sortedTags.map(([slug, { displayName, count }]) => (
+                    <li>
+                        <a href={`/tags/${slug}/`}>
+                            <span class="tag-name">#{displayName}</span>
+                            <span class="tag-count">({count})</span>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+</Layout>
+
+<style>
+    .tag-cloud {
+        list-style: none;
+        padding: 0;
+        margin: 2rem 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .tag-cloud a {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        background: #f5f5f5;
+        border-radius: 999px;
+        color: var(--color-text);
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .tag-cloud a:hover {
+        background: #ebebeb;
+    }
+
+    .tag-count {
+        color: var(--color-text-muted);
+        font-size: 0.8rem;
+    }
+</style>

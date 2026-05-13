@@ -5,7 +5,7 @@ import portrait from "../assets/portrait.webp";
 ---
 
 <Layout title="Caleb Sponheim">
-    <main>
+    <div class="home">
         <Image
             src={portrait}
             alt="Portrait of Caleb Sponheim"
@@ -18,20 +18,28 @@ import portrait from "../assets/portrait.webp";
             <h1>Caleb Sponheim, PhD</h1>
 
             <p>
-                I am an applied researcher and AI expert currently working as a
+                I am an applied researcher and AI expert. Right now, I'm a
                 Senior Experience Specialist and AI Lead at
-                <a href="https://www.nngroup.com/people/caleb-sponheim/">NN/G</a>. I
-                communicate complex topics, conduct empirical research, and build AI
-                systems. I pride myself on helping people through practical,
-                skeptical, and grounded teaching.
+                <a href="https://www.nngroup.com/people/caleb-sponheim/">NN/G</a
+                >.
             </p>
 
             <p>
                 I've been cited as an expert on AI in publications including
-                <a href="https://time.com/7346052/problem-ai-flattering-us/">Time</a>,
-                <a href="https://www.axios.com/2025/07/07/ai-sycophancy-chatbots-mental-health">Axios</a>,
-                <a href="https://futurism.com/sycophancy-chatbots-ai-problem">Futurism</a>, and
-                <a href="https://www.cnet.com/tech/services-and-software/apples-genmoji-might-be-a-prompt-engineering-training-tool-in-disguise/">CNET</a>.
+                <a href="https://time.com/7346052/problem-ai-flattering-us/"
+                    >Time</a
+                >,
+                <a
+                    href="https://www.axios.com/2025/07/07/ai-sycophancy-chatbots-mental-health"
+                    >Axios</a
+                >,
+                <a href="https://futurism.com/sycophancy-chatbots-ai-problem"
+                    >Futurism</a
+                >, and
+                <a
+                    href="https://www.cnet.com/tech/services-and-software/apples-genmoji-might-be-a-prompt-engineering-training-tool-in-disguise/"
+                    >CNET</a
+                >.
             </p>
 
             <p class="contact">
@@ -51,22 +59,11 @@ import portrait from "../assets/portrait.webp";
                 </a>
             </p>
         </div>
-    </main>
+    </div>
 </Layout>
 
 <style>
-    main {
-        max-width: 52rem;
-        margin: 0 auto;
-        padding: 4rem 1.5rem;
-        font-family:
-            ui-sans-serif,
-            system-ui,
-            -apple-system,
-            sans-serif;
-        line-height: 1.6;
-        color: #1a1a1a;
-
+    .home {
         display: grid;
         grid-template-columns: 1fr;
         grid-template-areas:
@@ -76,7 +73,7 @@ import portrait from "../assets/portrait.webp";
     }
 
     @media (min-width: 720px) {
-        main {
+        .home {
             grid-template-columns: minmax(0, 1fr) 14rem;
             grid-template-areas: "content portrait";
             gap: 3rem;
@@ -85,32 +82,21 @@ import portrait from "../assets/portrait.webp";
     }
 
     .portrait {
-        grid-area: portrait;
-        width: 12rem;
-        height: auto;
-        justify-self: center;
+        display: none;
+    }
+
+    @media (min-width: 720px) {
+        .portrait {
+            display: block;
+            grid-area: portrait;
+            width: 12rem;
+            height: auto;
+            justify-self: center;
+        }
     }
 
     .content {
         grid-area: content;
-    }
-
-    h1 {
-        font-size: 2.25rem;
-        margin: 0 0 1.5rem;
-        letter-spacing: -0.02em;
-    }
-
-    p {
-        margin: 0 0 1.25rem;
-    }
-
-    a {
-        color: #3b3bbf;
-    }
-
-    a:hover {
-        text-decoration: none;
     }
 
     .contact strong {

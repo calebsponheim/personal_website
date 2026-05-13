@@ -1,8 +1,191 @@
-<body>
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-    <a href="/blog/">Blog</a>
+---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import { tagSlug } from "../utils/tags";
 
-    <h1>My Astro Learning Blog</h1>
-    <p>This is where I will post about my journey learning Astro.</p>
-</body>
+// Fetch every post in the `blog` collection. Filter out drafts when
+// building for production, but show them in the dev server so you can
+// preview work-in-progress.
+const posts = (
+    await getCollection("blog", ({ data }) => {
+        return import.meta.env.DEV || !data.draft;
+    })
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+});
+
+// ~225 words per minute is the conventional average reading speed used
+// by Medium, Substack, etc.
+function readingTimeMinutes(body) {
+    const words = body.split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(words / 225));
+}
+---
+
+<Layout
+    title="Blog · Caleb Sponheim"
+    description="Essays and notes on applied research, AI, and design."
+>
+    <h1>Blog</h1>
+
+    {
+        posts.length === 0 ? (
+            <p>Posts coming soon.</p>
+        ) : (
+            <ul class="post-list">
+                {posts.map((post) => {
+                    const minutes = readingTimeMinutes(post.body ?? "");
+                    return (
+                        <li class="post-item">
+                            <a href={`/blog/${post.id}/`} class="post-link">
+                                {post.data.heroImage && (
+                                    <Image
+                                        src={post.data.heroImage}
+                                        alt={post.data.heroImageAlt ?? ""}
+                                        widths={[400, 800, 1200]}
+                                        sizes="(min-width: 720px) 720px, 100vw"
+                                        class="post-cover"
+                                    />
+                                )}
+                                <div class="post-text">
+                                    <h2>{post.data.title}</h2>
+                                    <p class="post-meta">
+                                        <time
+                                            datetime={post.data.pubDate.toISOString()}
+                                        >
+                                            {dateFormatter.format(
+                                                post.data.pubDate,
+                                            )}
+                                        </time>
+                                        <span class="dot">·</span>
+                                        <span>{minutes} min read</span>
+                                    </p>
+                                    {post.data.description && (
+                                        <p class="post-description">
+                                            {post.data.description}
+                                        </p>
+                                    )}
+                                </div>
+                            </a>
+                            {post.data.tags && post.data.tags.length > 0 && (
+                                <ul class="post-tags">
+                                    {post.data.tags.map((tag) => (
+                                        <li>
+                                            <a href={`/tags/${tagSlug(tag)}/`}>
+                                                #{tag}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </li>
+                    );
+                })}
+            </ul>
+        )
+    }
+
+    <p class="rss-link">
+        <a href="/rss.xml">Subscribe via RSS →</a>
+        <span class="dot">·</span>
+        <a href="/tags">Browse by tag</a>
+    </p>
+</Layout>
+
+<style>
+    .post-list {
+        list-style: none;
+        padding: 0;
+        margin: 2rem 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .post-link {
+        display: grid;
+        gap: 1rem;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .post-cover {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        border-radius: 0.5rem;
+    }
+
+    .post-item h2 {
+        margin: 0 0 0.25rem;
+        color: var(--color-link);
+    }
+
+    .post-link:hover h2 {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .post-meta {
+        margin: 0 0 0.5rem;
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: baseline;
+        flex-wrap: wrap;
+    }
+
+    .post-meta .dot {
+        opacity: 0.6;
+    }
+
+    .post-description {
+        margin: 0;
+        color: var(--color-text);
+    }
+
+    .post-tags {
+        list-style: none;
+        padding: 0;
+        margin: 0.75rem 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .post-tags a {
+        display: inline-block;
+        padding: 0.25rem 0.625rem;
+        background: #f5f5f5;
+        border-radius: 999px;
+        color: var(--color-text-muted);
+        text-decoration: none;
+        font-size: 0.8rem;
+    }
+
+    .post-tags a:hover {
+        background: #ebebeb;
+        color: var(--color-text);
+    }
+
+    .rss-link {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--color-border);
+        font-size: 0.9rem;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .rss-link .dot {
+        opacity: 0.6;
+    }
+</style>
