@@ -32,10 +32,14 @@ const {
 const SITE_NAME = "Caleb Sponheim";
 const DEFAULT_DESCRIPTION =
     "Applied researcher and AI expert. Senior Experience Specialist and AI Lead at NN/G.";
+// Site-wide fallback share card. The endpoint lives at
+// `src/pages/og/site.png.ts` and renders at build time.
+const DEFAULT_OG_IMAGE = "/og/site.png";
 
 const pageTitle = title ?? frontmatter?.title ?? SITE_NAME;
 const pageDescription =
     description ?? frontmatter?.description ?? DEFAULT_DESCRIPTION;
+const shareImage = image ?? DEFAULT_OG_IMAGE;
 
 // Canonical URL — built from the page's path and the site's `site` config.
 // Falls back gracefully if `site` isn't set yet (dev environment).
@@ -44,10 +48,9 @@ const canonicalURL = Astro.site
     : Astro.url.pathname;
 
 // Resolve the share image to an absolute URL when we have a site config.
-const absoluteImage =
-    image && Astro.site
-        ? new URL(image, Astro.site).toString()
-        : image;
+const absoluteImage = Astro.site
+    ? new URL(shareImage, Astro.site).toString()
+    : shareImage;
 ---
 
 <!doctype html>
