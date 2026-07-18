@@ -2,6 +2,7 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import { unified } from '@astrojs/markdown-remark';
 import { rehypeImageFigures } from './src/lib/rehype-image-figures.js';
 
 // https://astro.build/config
@@ -20,10 +21,18 @@ export default defineConfig({
             theme: 'github-light',
             wrap: true,
         },
-        // Custom rehype plugin: any Markdown image with a title attribute
-        // — `![alt](src "caption")` — is wrapped in a <figure> with a
-        // <figcaption>. See src/lib/rehype-image-figures.js for details.
-        rehypePlugins: [rehypeImageFigures],
+        // Astro 7 defaults to the Sätteri Markdown pipeline, which doesn't
+        // support remark/rehype plugins. We depend on a custom rehype
+        // plugin below, so we explicitly opt back into the remark/rehype
+        // pipeline via `unified()` (from @astrojs/markdown-remark) per the
+        // Astro v7 upgrade guide.
+        processor: unified({
+            // Custom rehype plugin: any Markdown image with a title
+            // attribute — `![alt](src "caption")` — is wrapped in a
+            // <figure> with a <figcaption>. See
+            // src/lib/rehype-image-figures.js for details.
+            rehypePlugins: [rehypeImageFigures],
+        }),
     },
     fonts: [
         {

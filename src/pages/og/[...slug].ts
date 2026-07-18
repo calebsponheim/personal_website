@@ -14,8 +14,10 @@ const pages = Object.fromEntries(posts.map((post) => [post.id, post.data]));
 
 // `OGImageRoute` returns a Promise in 0.11+, so we await it before
 // re-exporting `getStaticPaths` and `GET`. Top-level await is required.
+//
+// astro-og-canvas 0.13 removed the `param` option — the route parameter
+// name is now auto-detected from this file's name (`[...slug].ts` -> `slug`).
 const { getStaticPaths, GET } = await OGImageRoute({
-    param: "slug",
     pages,
     getImageOptions: (_path, page) => ({
         title: page.title,
