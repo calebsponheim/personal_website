@@ -37,4 +37,37 @@ const blog = defineCollection({
         }),
 });
 
-export const collections = { blog };
+// The `projects` collection: a curated list of things Caleb has built or
+// done. Unlike `blog`, projects are sorted by a hand-set `order` number,
+// not by date — the narrative arc of the projects page matters more than
+// chronology. Each project can be either an internal sub-page (markdown
+// body rendered at `/projects/{slug}/`) or an external link card (set
+// `externalUrl` and the index page links straight out instead).
+const projects = defineCollection({
+    loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
+    schema: ({ image }) =>
+        z.object({
+            title: z.string(),
+            // One-line summary shown on the projects index card.
+            description: z.string().optional(),
+            // Hand-set sort key. Lower numbers appear first on `/projects`.
+            // Using a number (not date) so the page tells a story instead
+            // of being a timeline.
+            order: z.number(),
+            // Human-readable timeframe shown on cards and sub-pages —
+            // free text so values like "Ongoing", "2018–2024", or
+            // "June 2026" all work without fighting a Date object.
+            dateLabel: z.string().optional(),
+            heroImage: image().optional(),
+            heroImageAlt: z.string().optional(),
+            // If set, the index card becomes an outbound link (no sub-page
+            // is rendered). Use this for projects that live on another
+            // site, e.g. an NN/G author page.
+            externalUrl: z.string().url().optional(),
+            // Drafts are visible in dev, hidden in prod builds — same
+            // convention as the `blog` collection.
+            draft: z.boolean().optional().default(false),
+        }),
+});
+
+export const collections = { blog, projects };
