@@ -31,3 +31,6 @@ squarespace-mirror/
 /playwright-report/
 /playwright/.cache/
 /blob-report/
+
+# Superpowers SDD scratch (plans/briefs/ledger live in docs/ instead)
+.superpowers/

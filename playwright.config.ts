@@ -27,5 +27,12 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    // Astro 7 auto-detects AI coding agent environments and starts `astro
+    // dev` as a detached background process (see the Astro v7 upgrade
+    // notes on "Background mode"). That's great for interactive agent use,
+    // but it makes the process Playwright spawns exit immediately after
+    // handing off to the background daemon, which Playwright mistakes for
+    // a startup failure. Force the server to stay in the foreground here.
+    env: { ASTRO_DEV_BACKGROUND: '0' },
   },
 });

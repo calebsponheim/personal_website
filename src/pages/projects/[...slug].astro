@@ -1,0 +1,181 @@
+---
+import { Image } from "astro:assets";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+// Pre-render one static page per non-external project at build time.
+// Projects with `externalUrl` set are deliberately excluded — the index
+// page links them out directly, so they don't need a local sub-page.
+export async function getStaticPaths() {
+    const projects = await getCollection("projects", ({ data }) => {
+        const showDraft = import.meta.env.DEV || !data.draft;
+        return showDraft && !data.externalUrl;
+    });
+    return projects.map((project) => ({
+        params: { slug: project.id },
+        props: { project },
+    }));
+}
+
+type Props = { project: CollectionEntry<"projects"> };
+const { project } = Astro.props;
+
+const { Content } = await render(project);
+---
+
+<Layout
+    title={`${project.data.title} · Caleb Sponheim`}
+    description={project.data.description}
+    image={project.data.heroImage?.src}
+    ogType="article"
+>
+    <article>
+        <header class="project-header">
+            <h1>{project.data.title}</h1>
+            {
+                project.data.description && (
+                    <p class="project-lede">{project.data.description}</p>
+                )
+            }
+            {
+                project.data.dateLabel && (
+                    <p class="project-meta">{project.data.dateLabel}</p>
+                )
+            }
+            {
+                project.data.heroImage && (
+                    <Image
+                        src={project.data.heroImage}
+                        alt={project.data.heroImageAlt ?? ""}
+                        widths={[400, 800, 1200, 1600]}
+                        sizes="(min-width: 720px) 720px, 100vw"
+                        class="project-hero"
+                    />
+                )
+            }
+        </header>
+        <div class="project-body">
+            <Content />
+        </div>
+        <footer class="project-footer">
+            <p class="back-link">
+                <a href="/projects">← Back to all projects</a>
+            </p>
+        </footer>
+    </article>
+</Layout>
+
+<style>
+    article {
+        max-width: 38rem;
+        margin: 0 auto;
+    }
+
+    .project-header {
+        margin-bottom: 2.5rem;
+    }
+
+    .project-lede {
+        margin: 0.5rem 0 1rem;
+        font-size: 1.25rem;
+        line-height: 1.4;
+        color: var(--color-text-muted);
+    }
+
+    .project-meta {
+        margin: 0 0 1.5rem;
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+    }
+
+    .project-hero {
+        width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        margin: 1.5rem 0 0;
+    }
+
+    /* Long-form typography — same approach as blog posts. `:global()`
+       is needed because the Markdown-rendered HTML inside <Content />
+       isn't scoped by Astro. */
+    .project-body {
+        font-family: var(--font-serif);
+        font-size: 1.125rem;
+        line-height: 1.7;
+    }
+
+    .project-body :global(h2) {
+        font-size: 1.5rem;
+        margin: 2.5rem 0 1rem;
+        letter-spacing: -0.01em;
+    }
+
+    .project-body :global(h3) {
+        font-size: 1.2rem;
+        margin: 2rem 0 0.75rem;
+    }
+
+    .project-body :global(p) {
+        margin: 0 0 1.25rem;
+    }
+
+    .project-body :global(blockquote) {
+        margin: 1.5rem 0;
+        padding: 0.5rem 1.25rem;
+        border-left: 3px solid var(--color-border);
+        color: var(--color-text-muted);
+        font-style: italic;
+    }
+
+    .project-body :global(img) {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .project-body :global(figure) {
+        margin: 2rem 0;
+    }
+
+    .project-body :global(figure img) {
+        margin: 0;
+    }
+
+    .project-body :global(figcaption) {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        font-style: italic;
+        color: var(--color-text-muted);
+        text-align: center;
+        margin: 0.75rem auto 0;
+        max-width: 32rem;
+    }
+
+    .project-body :global(ul),
+    .project-body :global(ol) {
+        margin: 0 0 1.25rem;
+        padding-left: 1.5rem;
+    }
+
+    .project-body :global(li) {
+        margin-bottom: 0.5rem;
+    }
+
+    .project-body :global(hr) {
+        margin: 2.5rem auto;
+        border: none;
+        border-top: 1px solid var(--color-border);
+        width: 30%;
+    }
+
+    .project-footer {
+        margin-top: 4rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .back-link {
+        margin: 0;
+    }
+</style>

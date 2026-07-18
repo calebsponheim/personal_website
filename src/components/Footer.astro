@@ -1,9 +1,33 @@
 ---
 const year = new Date().getFullYear();
+
+// `rel="me"` is the indieweb convention for "this profile is also me" — both
+// LinkedIn and NN/G honor it for verifying identity across the web.
+const socialLinks = [
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/calebsponheim/" },
+    { label: "NN/G", href: "https://www.nngroup.com/people/caleb-sponheim/" },
+];
 ---
 
 <footer class="site-footer">
-    <p>© {year} Caleb Sponheim</p>
+    <p class="copyright">© {year} Caleb Sponheim</p>
+    <nav class="social" aria-label="Social profiles">
+        <ul>
+            {
+                socialLinks.map((link) => (
+                    <li>
+                        <a
+                            href={link.href}
+                            rel="me noopener noreferrer"
+                            target="_blank"
+                        >
+                            {link.label}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </nav>
 </footer>
 
 <style>
@@ -14,9 +38,31 @@ const year = new Date().getFullYear();
         border-top: 1px solid var(--color-border);
         color: var(--color-text-muted);
         font-size: 0.875rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem 1.5rem;
+        align-items: baseline;
+        justify-content: space-between;
     }
 
-    .site-footer p {
+    .site-footer .copyright {
         margin: 0;
+    }
+
+    .social ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 1rem;
+    }
+
+    /* Middot separator between links. The `/ ""` half of the `content` value
+       gives the pseudo-element empty alt text so assistive tech ignores it. */
+    .social li + li::before {
+        content: "·" / "";
+        margin-right: 1rem;
+        color: var(--color-border);
     }
 </style>

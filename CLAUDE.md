@@ -19,13 +19,14 @@ Playwright's `webServer` block boots `npm run dev` for you and reuses an already
 
 ```
 src/
-├── content/blog/          One folder per post (post.md + co-located images)
-├── content.config.ts      Zod schema for the `blog` collection
-├── pages/                 Routes — index, blog, blog/[...slug], tags, og, rss
+├── content/blog/          One markdown file per post + sibling assets folder
+├── content/projects/      Same pattern — curated portfolio entries
+├── content.config.ts      Zod schemas for the `blog` and `projects` collections
+├── pages/                 Routes — index, blog, blog/[...slug], projects, projects/[...slug], tags, og, rss
 │   ├── og/[...slug].ts    Auto-generated 1200×630 OG PNGs via astro-og-canvas
 │   └── rss.xml.js         RSS 2.0 feed at /rss.xml
 ├── layouts/Layout.astro   <head> meta (SEO, OG, Twitter card, RSS auto-discovery)
-├── components/            Header, Footer, Navigation, Social, Welcome (small set)
+├── components/            Header, Footer, Navigation (small set)
 ├── lib/rehype-image-figures.js   Custom rehype plugin (see "Markdown" below)
 ├── utils/tags.ts          `tagSlug()` — used wherever tag URLs are built
 └── styles/global.css      Site-wide CSS + CSS custom properties
@@ -34,7 +35,11 @@ tests/smoke.spec.ts        Playwright smoke test
 
 ## Non-obvious conventions
 
-**Draft filter.** `import.meta.env.DEV || !data.draft` — drafts are visible in dev, hidden at build. The pattern is duplicated in [blog.astro](src/pages/blog.astro), [blog/[...slug].astro](src/pages/blog/[...slug].astro), [og/[...slug].ts](src/pages/og/[...slug].ts), and [rss.xml.js](src/pages/rss.xml.js). If you add a new view of blog posts, keep this filter consistent.
+**Draft filter.** `import.meta.env.DEV || !data.draft` — drafts are visible in dev, hidden at build. The pattern is duplicated across every place that queries `getCollection`: [blog.astro](src/pages/blog.astro), [blog/[...slug].astro](src/pages/blog/[...slug].astro), [og/[...slug].ts](src/pages/og/[...slug].ts), [rss.xml.js](src/pages/rss.xml.js), [projects.astro](src/pages/projects.astro), and [projects/[...slug].astro](src/pages/projects/[...slug].astro). If you add a new view of either collection, keep this filter consistent.
+
+**Projects sort by `order`, not date.** Unlike blog posts (sorted reverse-chronologically by `pubDate`), projects use a hand-set integer `order` field so the page tells a curated story. Spaced increments (10, 20, 30…) make reordering cheap without renumbering everything.
+
+**External project entries.** A project with `externalUrl` set is a link-out card on `/projects` with no sub-page — [projects/[...slug].astro](src/pages/projects/[...slug].astro) filters these out of `getStaticPaths`. Use this for work that lives on another site (e.g. an NN/G author page).
 
 **Markdown figures from titled images.** [src/lib/rehype-image-figures.js](src/lib/rehype-image-figures.js) rewrites any standalone Markdown image with a title — `![alt](./photo.jpg "caption text")` — into `<figure><img><figcaption>`. Inline images (mixed with text in a paragraph) stay as `<img>`. Use the title slot for the visible caption; the alt stays alt.
 

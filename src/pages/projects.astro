@@ -1,0 +1,148 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+// Fetch every entry in the `projects` collection. Drafts show in dev
+// (so works-in-progress are previewable) but are hidden in production —
+// same convention as the `blog` collection.
+const projects = (
+    await getCollection("projects", ({ data }) => {
+        return import.meta.env.DEV || !data.draft;
+    })
+).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout
+    title="Projects · Caleb Sponheim"
+    description="Things I've built, written, taught, and made — from neuroscience research to AI agents to interactive art."
+>
+    <h1>Projects</h1>
+
+    <p class="lede">
+        A curated set of work I'm proud of, ordered roughly from current to
+        foundational. Not a resume — see the <a
+            href="https://docs.google.com/document/d/1rlU65uZEFFuvl20uaJZzaqjlPQYRzaJCtwfJ5-daZaM/edit?usp=sharing"
+            >resume</a
+        > for that.
+    </p>
+
+    {
+        projects.length === 0 ? (
+            <p>Projects coming soon.</p>
+        ) : (
+            <ul class="project-list">
+                {projects.map((project) => {
+                    const isExternal = Boolean(project.data.externalUrl);
+                    const href = isExternal
+                        ? project.data.externalUrl
+                        : `/projects/${project.id}/`;
+                    const linkProps = isExternal
+                        ? {
+                              target: "_blank",
+                              rel: "noopener noreferrer",
+                          }
+                        : {};
+                    return (
+                        <li class="project-item">
+                            <a
+                                href={href}
+                                class="project-link"
+                                {...linkProps}
+                            >
+                                <h2 class="project-title">
+                                    {project.data.title}
+                                    {isExternal && (
+                                        <span
+                                            class="external-icon"
+                                            aria-hidden="true"
+                                        >
+                                            {" ↗"}
+                                        </span>
+                                    )}
+                                </h2>
+                                {project.data.dateLabel && (
+                                    <span class="project-meta">
+                                        {project.data.dateLabel}
+                                    </span>
+                                )}
+                                {project.data.description && (
+                                    <p class="project-description">
+                                        {project.data.description}
+                                    </p>
+                                )}
+                            </a>
+                        </li>
+                    );
+                })}
+            </ul>
+        )
+    }
+</Layout>
+
+<style>
+    .lede {
+        margin: 0 0 2rem;
+        color: var(--color-text-muted);
+        font-size: 1.05rem;
+    }
+
+    .project-list {
+        list-style: none;
+        padding: 0;
+        margin: 2rem 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Two-column grid: title on the left, dateLabel right-aligned on the
+       same baseline. Description (when present) tucks under the title in
+       the left column on a second row. */
+    .project-link {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        column-gap: 1.5rem;
+        align-items: baseline;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .project-title {
+        grid-column: 1;
+        grid-row: 1;
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: var(--color-link);
+    }
+
+    .project-meta {
+        grid-column: 2;
+        grid-row: 1;
+        color: var(--color-text-muted);
+        font-size: 0.85rem;
+        /* Keep dates on one line — they're always short ("Ongoing",
+           "2026–present"), so wrapping would be visual noise. */
+        white-space: nowrap;
+    }
+
+    .project-description {
+        grid-column: 1;
+        grid-row: 2;
+        margin: 0.25rem 0 0;
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .project-link:hover .project-title {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .external-icon {
+        font-weight: 400;
+        font-size: 0.85em;
+        opacity: 0.7;
+    }
+</style>
