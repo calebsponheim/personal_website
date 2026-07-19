@@ -88,11 +88,15 @@ const { Content } = await render(project);
         font-size: 0.9rem;
     }
 
+    /* Hero is a supporting image, not a banner — cap its width and center
+       it so it doesn't dominate the top of the page. */
     .project-hero {
-        width: 100%;
+        display: block;
+        width: auto;
+        max-width: min(24rem, 100%);
         height: auto;
         border-radius: 0.5rem;
-        margin: 1.5rem 0 0;
+        margin: 1.5rem auto 0;
     }
 
     /* Long-form typography — same approach as blog posts. `:global()`

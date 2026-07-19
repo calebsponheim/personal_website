@@ -141,11 +141,15 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
         color: var(--color-text-muted);
     }
 
+    /* Hero is a supporting image, not a banner — cap its width and center
+       it so it doesn't dominate the top of the page. */
     .post-hero {
-        width: 100%;
+        display: block;
+        width: auto;
+        max-width: min(24rem, 100%);
         height: auto;
         border-radius: 0.5rem;
-        margin: 1.5rem 0 0;
+        margin: 1.5rem auto 0;
     }
 
     /* Long-form reading typography. `:global()` is needed because the
