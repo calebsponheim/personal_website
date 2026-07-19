@@ -12,7 +12,9 @@
     "astro": "astro",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "pw:codegen": "playwright codegen http://localhost:4321"
+    "pw:codegen": "playwright codegen http://localhost:4321",
+    "deploy": "astro build && wrangler deploy",
+    "cf:login": "wrangler login"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.1",
@@ -26,6 +28,7 @@
     "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.61.1"
+    "@playwright/test": "^1.61.1",
+    "wrangler": "^4.112.0"
   }
 }

@@ -34,3 +34,6 @@ squarespace-mirror/
 
 # Superpowers SDD scratch (plans/briefs/ledger live in docs/ instead)
 .superpowers/
+
+# Wrangler local dev/build artifacts (local state, uploaded asset manifests, etc.)
+.wrangler/
