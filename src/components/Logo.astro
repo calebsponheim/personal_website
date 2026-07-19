@@ -1,0 +1,37 @@
+---
+// Caleb's personal mark: a single stroked "CS"-like curve.
+// The stroke uses `currentColor` rather than a hardcoded hex so the color is
+// driven by CSS `color` — this lets a surrounding link set a hover color on the
+// mark for free, while the default resolves to the global `--logo-color` knob.
+//
+// viewBox note: the source art's declared viewBox (0 0 511 361) clips the right
+// lobe, whose path coordinates reach ~533 (+6.5 for half the stroke ≈ 539.4).
+// This viewBox spans the full stroke bounds — x[0, 539.4], y[0, 361] — plus ~7
+// units of padding on every side, so nothing is cut off at any render size.
+---
+
+<svg
+    class="logo"
+    viewBox="-7 -7 553 375"
+    fill="none"
+    role="img"
+    aria-label="Caleb Sponheim logo"
+    xmlns="http://www.w3.org/2000/svg"
+>
+    <path
+        d="M179.977 6.5C54.3559 6.5 6.5 102.5 6.5 180.5C6.5 258.5 54.3559 354.5 179.977 354.5C337.5 354.5 305.599 180.5 419.257 180.5C532.914 180.5 532.914 354.5 419.257 354.5"
+        stroke="currentColor"
+        stroke-width="13"
+    />
+</svg>
+
+<style>
+    .logo {
+        /* ~40px tall in the header; width tracks the aspect ratio automatically. */
+        height: 40px;
+        width: auto;
+        display: block;
+        /* Single source of truth for the mark's color — see --logo-color in global.css. */
+        color: var(--logo-color);
+    }
+</style>

@@ -17,58 +17,102 @@ Eight episodes came out over about four months in 2018, each one a conversation 
 ### 1. "I'm going to do this, and f*** all of you"
 **September 10, 2018**
 
-The launch episode. Welcome to Science and Feelings — open, heartfelt, nerdy conversations, in a format that was still figuring itself out.
+So, this is new!
 
-[Episode page](https://www.calebsponheim.com/podcast/2018/8/27/cvah3f2yxv9oepnhf0ih0js6kegsye)
+Welcome to Science and Feelings, a place to have my favorite types of conversations: open, heartfelt, nerdy, and helpful.
+
+This auditory home will change, twist, and morph while I learn how to make things fun and interesting to listen to.
+
+Feedback? Great. Find me in person, or email me at "caleb [dot] sponheim [at] gmail [dot] com".
+
+Learn more about me at calebsponheim.com
+
+More to come! Sit tight.
 
 ### 2. "Hey, you're pretty good at this."
 **September 24, 2018**
 
-A conversation with my friend and colleague JD. I admit to feeling eerily similar to him for a while — competitive, frustrated — and to working through that as we both settle into our lives as scientists.
+Hey, friends. I'm talking to my friend and colleague JD, and we spout a lot of platitudes.
 
-[Episode page](https://www.calebsponheim.com/podcast/2018/9/21/episode-2-jd)
+As I say in the intro, I felt eerily similar to JD for a while, so much that I felt frustrated and competitive when we were in the same room. I've since moved on (I think), and as we settle into our lives as scientists, I want to remain his friend.
+
+Feedback? Great. Find me in person, or email me at "caleb [dot] sponheim [at] gmail [dot] com"
+
+More to come!
 
 ### 3. Running on possum time
 **October 8, 2018**
 
-Kelsey and I talk about bones, possums, robots, and vulnerability.
+Hi! Kelsey and I talk a lot about bones, possums, robots, and vulnerability in this episode.
 
-[Episode page](https://www.calebsponheim.com/podcast/2018/10/4/running-on-possum-time)
+If you like these episodes so far, please recommend them to someone you think would also enjoy it. Thanks!
+
+If you have suggestions about how to make this podcast a better experience, please tell me! Find me in person, or email me at caleb [dot] sponheim [at] gmail [dot] com.
+
+As always, more to come in two weeks. Bye!
 
 ### 4. Science is a Pyramid Scheme
 **October 22, 2018**
 
-JP and I get into his UChicago research, circadian-rhythm diets, and a statistical technique we did not do a great job explaining on the fly.
+- [JP's UChicago Profile](https://psychology.uchicago.edu/directory/jonathan-riggle)
+- [JP's Lab](https://sites.google.com/site/prendergastlab/)
+- [Satchin Panda on 10-hour Diets](https://www.cell.com/cell-metabolism/fulltext/S1550-4131%2818%2930505-9)
 
-[Episode page](https://www.calebsponheim.com/podcast/2018/10/22/science-is-a-pyramid-scheme)
+We didn't do a great job of explaining the Platt method, so [here's a link to the Wikipedia article](https://en.wikipedia.org/wiki/Strong_inference).
+
+If you like the episodes, please recommend them to someone you think would also enjoy it. Thanks!
+
+If you have suggestions about how to make this podcast a better experience, please tell me! Find me in person, or email me at caleb [dot] sponheim [at] gmail [dot] com.
+
+More to come in two weeks. Bye!
 
 ### 5. "I've gone to the dark side"
 **November 5, 2018**
 
-Julian dives straight into the existential questions of science — his poetry, philosophy, and neuroscience background all show up in how he thinks about his work. He also insists everyone should take a metaethics course.
+- [NIH IRTA Postbac program](https://www.training.nih.gov/trainees/postbacs)
 
-[Episode page](https://www.calebsponheim.com/podcast/2018/11/5/ive-gone-to-the-dark-side)
+Julian is a great person to talk to because he immediately dives deep into the existential questions of science. He has thought so much about how his work and his science fits into the broader picture. His poetry, philosophy, and neuroscience background combine to make him really effective at what he does. Also, in this episode, he recommends that everyone take a metaethics philosophy course!
+
+If you like the episodes, please recommend them to someone you think would also enjoy it. Thanks!
+
+If you have suggestions about how to make this podcast a better experience, please tell me! email me at caleb [dot] sponheim [at] gmail [dot] com.
+
+Get ready for another episode, in two weeks! Talk to you then.
 
 ### 6. The Hotel with Infinite Rooms
 **November 19, 2018**
 
-Yuqing and I talk through Hilbert's paradox of the Grand Hotel, Magritte, and Joan Didion, and somehow it all connects back to her lab work.
+- [Yuqing's Website](https://www.yqzhu.com/)
+- [Yuqing's Lab](http://www.macleanlab.com/)
+- [Hotel with Infinite Rooms](https://en.wikipedia.org/wiki/Hilbert%27s_paradox_of_the_Grand_Hotel) ; [Video about the thought experiment](https://www.youtube.com/watch?v=Uj3_KqkI9Zo&t=9s)
+- [Rene Magritte](https://www.moma.org/artists/3692)
+- [Emily Yoon](https://emily-yoon-poetry.tumblr.com/bio) ; [Emily Yoon's new book](https://www.harpercollins.com/9780062843685/a-cruelty-special-to-our-species/)
+- [Joan Didion - Slouching Towards Bethlehem](http://essaysspring13.qwriting.qc.cuny.edu/files/2013/04/Joan-Didion-Goodbye-to-All-That.pdf) ; [The quote Yuqing referenced](https://www.goodreads.com/quotes/825645-of-course-it-might-have-been-some-other-city-had)
 
-[Episode page](https://www.calebsponheim.com/podcast/2018/11/19/the-hotel-with-infinite-rooms)
+If you like the episodes, please recommend the show to someone you think would also enjoy it.
+
+If you have suggestions, email me at caleb [dot] sponheim [at] gmail [dot] com.
 
 ### 7. Priorities w/ Jessy Morgan
 **December 3, 2018**
 
-Jessy explains her research into aphid stylets — the tiny mouthparts her lab is trying to mimic — and we talk priorities.
+- [Jessy's Program Profile](https://biophysics.uchicago.edu/the-students/jessica_morgan/)
+- [Jessy's Lab](http://tianlab.uchicago.edu/People.html)
+- [Jessy's Other Lab](http://mgcb.bsd.uchicago.edu/faculty/greenberg/index.html)
+- [A picture of an Aphid Stylet (what Jessy's work is trying to mimic)](https://natureofscienceib.files.wordpress.com/2018/02/phloem-sap.jpg)
 
-[Episode page](https://www.calebsponheim.com/podcast/2018/12/3/priorities-w-jessy-morgan)
+If you have suggestions for this series, you can find my email on my website.
+
+Ok Bye!
 
 ### 8. The end of the world, and this podcast
 **December 17, 2018**
 
-The finale. Keven's lab, YCombinator's call for carbon-renewal technologies, and a wrap on six months of asking my friends about themselves.
+- [Keven's Lab](http://bergelson.uchicago.edu/)
+- [YCombinator's call for carbon renewal technologies](http://carbon.ycombinator.com/)
+- [DESERT FLOODING](http://carbon.ycombinator.com/desert-flooding/)
 
-[Episode page](https://www.calebsponheim.com/podcast/2018/12/17/the-end-of-the-world-and-this-podcast)
+Thanks for listening. If you like this and want to hear more, drop me a line; I'm always happy to chat.
 
 ---
 

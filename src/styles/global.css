@@ -4,6 +4,8 @@
   --color-link: #3b3bbf;
   --color-border: #e5e5e5;
   --color-bg: #ffffff;
+  /* The one knob for the site logo's color. Black by default; change here only. */
+  --logo-color: #000;
   --content-width: 52rem;
   --font-sans:
     var(--font-inter),

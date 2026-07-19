@@ -19,23 +19,23 @@ import portrait from "../assets/portrait.webp";
 
             <p>
                 I am an applied researcher and AI expert. Right now, I'm a
-                Senior Experience Specialist and AI Lead at
+                Senior Experience Specialist and AI Lead at{" "}
                 <a href="https://www.nngroup.com/people/caleb-sponheim/">NN/G</a
                 >.
             </p>
 
             <p>
-                I've been cited as an expert on AI in publications including
+                I've been cited as an expert on AI in publications including{" "}
                 <a href="https://time.com/7346052/problem-ai-flattering-us/"
                     >Time</a
-                >,
+                >,{" "}
                 <a
                     href="https://www.axios.com/2025/07/07/ai-sycophancy-chatbots-mental-health"
                     >Axios</a
-                >,
+                >,{" "}
                 <a href="https://futurism.com/sycophancy-chatbots-ai-problem"
                     >Futurism</a
-                >, and
+                >, and{" "}
                 <a
                     href="https://www.cnet.com/tech/services-and-software/apples-genmoji-might-be-a-prompt-engineering-training-tool-in-disguise/"
                     >CNET</a
@@ -44,7 +44,7 @@ import portrait from "../assets/portrait.webp";
 
             <p class="contact">
                 <strong>Want to get in touch?</strong>
-                If you have an opportunity or introduction, shoot me a line at
+                If you have an opportunity or introduction, shoot me a line at{" "}
                 <em>caleb [dot] sponheim [at] gmail.com</em>. I will respond to
                 messages that are a good match for my schedule and interests.
                 Thanks!
@@ -63,6 +63,13 @@ import portrait from "../assets/portrait.webp";
 </Layout>
 
 <style>
+    /* Lighten the hero heading to regular weight so it pairs with the thin
+       stroke of the header logo — the global bold h1 overwhelmed it. Astro's
+       scoped selector outweighs the global h1 without touching other pages. */
+    h1 {
+        font-weight: 400;
+    }
+
     .home {
         display: grid;
         grid-template-columns: 1fr;
