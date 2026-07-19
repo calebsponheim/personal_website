@@ -2,7 +2,7 @@
 title: "I Built My Company's Institutional AI Agent"
 heroImage: ./post-1/cover.webp
 heroImageAlt: "top half of the lemon tree metaphor image. full image in the blog post"
-pubDate: 2022-07-01
+pubDate: 2026-05-08
 description: "Meet Lemon, built without a dev team. What it does, and the first of the Lemon Lessons."
 author: "Caleb Sponheim"
 tags: ["AI", "lemon"]
