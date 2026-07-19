@@ -8,9 +8,13 @@ heroImageAlt: "Two young men crouched on either side of a vertical strip of ligh
 draft: false
 ---
 
-In Spring 2014, Ben Doehr and I built three immersive installations as a Mentored Advanced Project at Grinnell College, which [wrote up the first one](https://www.grinnell.edu/news/forest-lights) when it opened. The work was later shown at [The Bishop's School](https://www.bishops.com/page) in San Diego through their artist-in-residence program. The pieces were called *Light*, *Dark*, and *Illuminate* — each one tried to give visitors a strange new environment to be inside of for a few minutes.
+In Spring 2014, Ben Doehr and I built three immersive installations as a Mentored Advanced Project at Grinnell College, which [wrote up the first one](https://www.grinnell.edu/news/forest-lights) when it opened. The work was later shown at [The Bishop's School](https://www.bishops.com/page) in San Diego through their artist-in-residence program. The pieces were called *Light*, *Dark*, and *Illuminate*. Each one tried to give visitors a strange new environment to be inside of for a few minutes.
 
 ## Light
+
+<div class="video-embed">
+    <iframe src="https://www.youtube-nocookie.com/embed/O3Kg0PjZuvU" title="Light — interactive light installation, Grinnell College, 2014" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
 
 ![Installation photograph from the Light series, Grinnell College, 2014](./interactive-art/light/light-01.jpg)
 
@@ -30,6 +34,10 @@ In Spring 2014, Ben Doehr and I built three immersive installations as a Mentore
 
 ## Dark
 
+<div class="video-embed">
+    <iframe src="https://www.youtube-nocookie.com/embed/CbgZfsLtJUQ?start=25" title="Dark — interactive light installation, Grinnell College, 2014" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
 ![Installation photograph from the Dark series, Grinnell College, 2014](./interactive-art/dark/dark-01.jpg)
 
 ![Installation photograph from the Dark series, Grinnell College, 2014](./interactive-art/dark/dark-02.jpg)
@@ -43,6 +51,14 @@ In Spring 2014, Ben Doehr and I built three immersive installations as a Mentore
 ![Installation photograph from the Dark series, Grinnell College, 2014](./interactive-art/dark/dark-06.jpg)
 
 ## Illuminate
+
+<div class="video-embed">
+    <iframe src="https://www.youtube-nocookie.com/embed/sAuNPiiprB0" title="Illuminate — interactive light installation, Grinnell College, 2014" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<div class="video-embed">
+    <iframe src="https://www.youtube-nocookie.com/embed/KRyF2-kgR8c" title="Illuminate (second view) — interactive light installation, Grinnell College, 2014" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
 
 ![Installation photograph from the Illuminate series, Grinnell College, 2014](./interactive-art/illuminate/illuminate-01.jpg)
 
