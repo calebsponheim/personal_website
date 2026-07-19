@@ -1,8 +1,12 @@
 ---
 import Navigation from "./Navigation.astro";
+import Logo from "./Logo.astro";
 ---
 
 <header class="site-header">
+    <a class="logo-link" href="/" aria-label="Caleb Sponheim — home">
+        <Logo />
+    </a>
     <Navigation />
 </header>
 
@@ -12,6 +16,17 @@ import Navigation from "./Navigation.astro";
         margin: 0 auto;
         padding: 1.5rem 1.5rem 0;
         display: flex;
-        justify-content: flex-end;
+        /* Logo pinned left, nav right; align centers so the mark sits level with the links. */
+        justify-content: space-between;
+        align-items: center;
+        /* Let the nav wrap under the logo on narrow screens instead of overflowing. */
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .logo-link {
+        /* Shrink-wrap the anchor to the mark so its click target isn't oversized. */
+        display: inline-flex;
+        flex: none;
     }
 </style>
