@@ -48,7 +48,13 @@ main {
 }
 
 h1 {
+  /* Newsreader (the body serif) at regular weight. Its optical display
+     sizing makes large titles more delicate and higher-contrast than the
+     prose, unifying headings with long-form body while Inter keeps the UI.
+     The thin serif also pairs with the header logo's thin stroke. */
+  font-family: var(--font-serif);
   font-size: 2.25rem;
+  font-weight: 400;
   margin: 0 0 1.5rem;
   letter-spacing: -0.02em;
   line-height: 1.2;
