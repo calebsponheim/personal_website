@@ -6,7 +6,7 @@ Research date: 2026-07-18. All claims below are sourced from live docs/search re
 
 1. **Add the domain to Cloudflare as a zone first** (DNS-only, no registrar change yet). In Squarespace DNS settings, disable DNSSEC if enabled and wait ~24h. Add `calebsponheim.com` to Cloudflare, switch nameservers at Squarespace to the two Cloudflare-assigned ones, and wait for the zone to go "Active" (minutes, up to 24h).
 2. **Deploy the site to a Cloudflare Worker with static assets** while still on the old registrar — this can happen in parallel with step 1 and costs nothing to try:
-   - No `@astrojs/cloudflare` adapter needed — this repo already does `astro build` → `dist/`, which is exactly what static-assets Workers wants.
+   - No `@astrojs/cloudflare` adapter needed — this repo already does `astro build` → `dist/`, which is exactly what static-assets Workers wants. The project adds a minimal Worker entrypoint only to canonicalize `www` to the apex host.
    - Add a minimal `wrangler.jsonc` (example in Q2 below), run `npx astro build && npx wrangler deploy`.
    - Wire up **Workers Builds** (Cloudflare's git integration) pointed at the GitHub repo for auto-deploy on push, replacing whatever manual deploy step exists today.
 3. **Point DNS at the Worker**: in the Worker's *Settings → Domains & Routes*, add `calebsponheim.com` and `www.calebsponheim.com` as Custom Domains. Cloudflare creates/updates the proxied DNS records and issues certs automatically. Verify the live site on the Cloudflare-served domain before touching registration.
@@ -38,21 +38,24 @@ For a purely static site specifically, the docs describe near feature-parity on 
 
 Per Astro's own deployment docs, for a fully static site (this project's default `output` mode — no SSR), **`@astrojs/cloudflare` is not required**. Plain `astro build` producing `dist/` plus a static-assets `wrangler.jsonc` is sufficient. The adapter is only needed for on-demand rendering (SSR).
 
-Minimal working config (per Astro docs and Cloudflare's static-assets reference):
+Current working config (per Astro docs and Cloudflare's static-assets reference):
 
 ```jsonc
 // wrangler.jsonc
 {
-  "name": "calebsponheim-com",
-  "compatibility_date": "2026-07-18",
+  "name": "calebsponheim-website",
+  "compatibility_date": "2026-07-19",
+  "main": "src/worker.js",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true,
     "not_found_handling": "404-page"   // this repo has a custom src/pages/404.astro
   }
 }
 ```
 
-No `main` worker entry point is required for a pure static deployment — the `assets` block alone is enough; the docs note a Worker script is only invoked if present and no matching asset is found.
+No adapter is required for a pure static deployment — the `assets` block is enough to serve the Astro build. This project also uses a small `main` entrypoint and `run_worker_first` so the Worker can redirect `www` to the canonical apex host before delegating to `env.ASSETS.fetch(request)`.
 
 Build + deploy:
 

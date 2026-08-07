@@ -5,9 +5,21 @@ and migrating the domain off Squarespace. For the full rationale, sourcing, and
 gotchas behind each step, see
 [docs/hosting-research-cloudflare.md](./hosting-research-cloudflare.md).
 
-Scaffolding already in place: `wrangler.jsonc` (static-assets Worker, no `main`
-entrypoint — see comments in that file), `wrangler` as a devDependency, and a
-`npm run deploy` script (`astro build && wrangler deploy`).
+Scaffolding already in place: `wrangler.jsonc` (static-assets Worker with a
+minimal `src/worker.js` entrypoint for the canonical-host redirect), `wrangler`
+as a devDependency, and a `npm run deploy` script (`astro build && wrangler deploy`).
+
+## Current state (verified 2026-08-07)
+
+- `calebsponheim.com` is an active full Cloudflare zone.
+- The registrar is Cloudflare, Inc.; the domain transfer is complete.
+- `calebsponheim.com` and `www.calebsponheim.com` are custom domains on the
+  `calebsponheim-website` Worker.
+- The apex site returns `200`, and `www` redirects to the apex over HTTPS.
+- Legacy Squarespace paths in `public/_redirects` are returning the expected
+  `301` redirects in production.
+- Deployments are currently uploaded with Wrangler. GitHub Actions now runs
+  the build and browser smoke tests, but it does not deploy automatically.
 
 ## 1. First-time deploy
 

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Personal website + blog for Caleb Sponheim. Astro 6, statically built, deployed at **calebsponheim.com**.
+Personal website + blog for Caleb Sponheim. Astro 7, statically built, deployed at **calebsponheim.com**.
 
 ## Commands
 
@@ -27,9 +27,12 @@ src/
 │   └── rss.xml.js         RSS 2.0 feed at /rss.xml
 ├── layouts/Layout.astro   <head> meta (SEO, OG, Twitter card, RSS auto-discovery)
 ├── components/            Header, Footer, Navigation (small set)
+├── worker.js               Cloudflare Worker entrypoint for www → apex redirects
 ├── lib/rehype-image-figures.js   Custom rehype plugin (see "Markdown" below)
 ├── utils/tags.ts          `tagSlug()` — used wherever tag URLs are built
 └── styles/global.css      Site-wide CSS + CSS custom properties
+public/_redirects           Legacy Squarespace route migrations
+public/robots.txt           Crawler policy and sitemap location
 tests/smoke.spec.ts        Playwright smoke test
 ```
 
