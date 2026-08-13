@@ -32,7 +32,11 @@ jobs:
         run: npm run build
 
       - name: Verify generated site artifacts
-        run: test -f dist/sitemap-index.xml && test -f dist/404.html
+        run: >-
+          test -f dist/sitemap-index.xml &&
+          test -f dist/404.html &&
+          test -f dist/_headers &&
+          test -f dist/_redirects
 
       - name: Run browser smoke tests
         run: npm run test:e2e

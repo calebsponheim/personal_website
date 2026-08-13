@@ -12,6 +12,7 @@ test('important public routes respond successfully', async ({ page }) => {
     '/about/',
     '/projects/',
     '/blog/',
+    '/blog/i-built-my-companys-institutional-ai-agent/',
     '/rss.xml',
     '/robots.txt',
   ]) {
