@@ -35,6 +35,18 @@ test('the home page exposes canonical and social metadata', async ({ page }) => 
     'content',
     'https://calebsponheim.com/og/site.png',
   );
+  await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
+    'content',
+    '1200',
+  );
+  await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute(
+    'content',
+    '630',
+  );
+  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+    'content',
+    /Caleb Sponheim/,
+  );
 });
 
 test('unknown routes use the custom not-found page', async ({ page }) => {

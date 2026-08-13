@@ -9,7 +9,7 @@ Scaffolding already in place: `wrangler.jsonc` (static-assets Worker with a
 minimal `src/worker.js` entrypoint for the canonical-host redirect), `wrangler`
 as a devDependency, and a `npm run deploy` script (`astro build && wrangler deploy`).
 
-## Current state (verified 2026-08-07)
+## Current state (verified 2026-08-13)
 
 - `calebsponheim.com` is an active full Cloudflare zone.
 - The registrar is Cloudflare, Inc.; the domain transfer is complete.
@@ -18,8 +18,9 @@ as a devDependency, and a `npm run deploy` script (`astro build && wrangler depl
 - The apex site returns `200`, and `www` redirects to the apex over HTTPS.
 - Legacy Squarespace paths in `public/_redirects` are returning the expected
   `301` redirects in production.
-- Deployments are currently uploaded with Wrangler. GitHub Actions now runs
-  the build and browser smoke tests, but it does not deploy automatically.
+- GitHub Actions runs the build and browser smoke tests. Cloudflare Workers
+  Builds is connected for deployments. Its generated API token was rotated on
+  2026-08-13 after the original credential was revoked and stopped builds.
 
 ## 1. First-time deploy
 
@@ -44,6 +45,15 @@ as a devDependency, and a `npm run deploy` script (`astro build && wrangler depl
    deployments.
 5. Optional: once this is working, manual `npm run deploy` is no longer
    required for normal changes — keep it as a fallback for one-off pushes.
+
+### If a build stops before checkout
+
+If the log says the selected build token “has been deleted or rolled,” open
+**Worker → Settings → Builds**, edit the production and non-production build
+configurations, and choose **Create new token** (or select another active user
+token) under **API token**. Retry the failed build after saving. The repository
+commands do not need to change: build with `npm run build`, then deploy with
+`npx wrangler deploy`.
 
 ## 3. Domain migration — DNS first, registrar transfer later
 
