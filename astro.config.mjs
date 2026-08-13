@@ -7,8 +7,8 @@ import { rehypeImageFigures } from './src/lib/rehype-image-figures.js';
 
 // https://astro.build/config
 export default defineConfig({
-    // TODO: replace with your real domain. Used for RSS feed URLs,
-    // canonical link tags, sitemap entries, and Open Graph image URLs.
+    // Canonical public origin for RSS, canonical links, sitemap entries, and
+    // Open Graph image URLs. www is redirected to this apex host in src/worker.js.
     site: 'https://calebsponheim.com',
     integrations: [mdx(), sitemap()],
     markdown: {

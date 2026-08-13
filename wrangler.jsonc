@@ -9,11 +9,16 @@
     // — nothing here depends on flags newer than this, so it's safe to move forward.
     "compatibility_date": "2026-07-19",
 
-    // Fully static build (astro build -> dist/, no SSR): a static-assets Worker
-    // needs no `main` entrypoint at all. The Assets Worker serves files directly;
-    // a user Worker script only runs if present and no asset matches the request.
+    // Keep a small Worker entrypoint so host-level behavior (www -> apex) is
+    // handled before static assets are served.
+    "main": "src/worker.js",
+
+    // Astro builds a fully static site into dist/. The Worker delegates all
+    // non-redirect requests to the assets binding below.
     "assets": {
         "directory": "./dist",
+        "binding": "ASSETS",
+        "run_worker_first": true,
 
         // This repo ships a custom src/pages/404.astro that Astro builds into
         // dist/404.html — serve it for unmatched paths instead of a generic 404.
