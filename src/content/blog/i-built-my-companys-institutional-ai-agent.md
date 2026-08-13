@@ -1,6 +1,6 @@
 ---
 title: "I Built My Company's Institutional AI Agent"
-heroImage: ./post-1/cover.webp
+heroImage: ./i-built-my-companys-institutional-ai-agent/cover.webp
 heroImageAlt: "top half of the lemon tree metaphor image. full image in the blog post"
 pubDate: 2026-05-08
 description: "Meet Lemon, built without a dev team. What it does, and the first of the Lemon Lessons."
@@ -20,7 +20,7 @@ While all of this is super exciting, I have to admit: Kate had to bully me into 
 
 Here’s the wrinkle, though: we have a very small development team focused on mission-critical, profit-generating projects. They don’t have time to build an AI agent as a side project. **So, as a non-programmer, I’ve been building Lemon myself, and it has grown (carefully) into two major branches: workflow automation and a chatbot.**
 
-![Diagram of the Lemon system architecture: a tree where roots represent institutional memory, branches divide into automated systems and a conversational agent.](./post-1/tree.jpg "Every Lemon action grows from the same root (its institutional memory) and branches in two directions: automated systems that handle work in the background (some as sub-agents, others as single-step automations) and a conversational agent that lives in Slack.")
+![Diagram of the Lemon system architecture: a tree where roots represent institutional memory, branches divide into automated systems and a conversational agent.](./i-built-my-companys-institutional-ai-agent/tree.jpg "Every Lemon action grows from the same root (its institutional memory) and branches in two directions: automated systems that handle work in the background (some as sub-agents, others as single-step automations) and a conversational agent that lives in Slack.")
 
 Today, beneath its citrusy exterior, Lemon is mostly a series of tightly scoped automations that conditionally use large language models to handle tasks teams have flagged as automatable.
 

@@ -21,6 +21,12 @@ as a devDependency, and a `npm run deploy` script (`astro build && wrangler depl
 - GitHub Actions runs the build and browser smoke tests. Cloudflare Workers
   Builds is connected for deployments. Its generated API token was rotated on
   2026-08-13 after the original credential was revoked and stopped builds.
+- Only `main` deploys to production. Non-production branches run
+  `npx wrangler versions upload`, which creates a previewable Worker version
+  without promoting it to production.
+- The public GitHub repository protects `main`: pull requests, up-to-date
+  GitHub and Cloudflare checks, and resolved conversations are required;
+  force-pushes and branch deletion are disabled.
 
 ## 1. First-time deploy
 
@@ -36,14 +42,16 @@ as a devDependency, and a `npm run deploy` script (`astro build && wrangler depl
 1. In the Cloudflare dashboard, open the Worker created in step 1 → go to its
    **Settings → Builds** (or **Build** tab depending on dashboard version).
 2. Connect the GitHub account, then select the `calebsponheim/personal_website`
-   repo and the branch to auto-deploy (typically `main`).
+   repo. Keep the production build trigger restricted to `main`.
 3. If prompted, confirm the build command (`npm run build` / `astro build`) and
    output directory (`dist`) — Cloudflare's autoconfig usually detects Astro
    correctly, but double check against `wrangler.jsonc`'s `assets.directory`.
-4. Push to the connected branch and confirm a build/deploy runs automatically
-   and shows up as a GitHub check run. PRs against that branch will get preview
-   deployments.
-5. Optional: once this is working, manual `npm run deploy` is no longer
+4. Configure the non-production trigger for all branches except `main` with
+   deploy command `npx wrangler versions upload`. This uploads a previewable
+   version without changing production traffic.
+5. Push a branch and confirm the Cloudflare GitHub check passes without a
+   production deployment. Merge it, then confirm the `main` build deploys.
+6. Optional: once this is working, manual `npm run deploy` is no longer
    required for normal changes — keep it as a fallback for one-off pushes.
 
 ### If a build stops before checkout

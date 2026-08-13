@@ -8,7 +8,7 @@ author: "Caleb Sponheim"
 tags: ["AI", "lemon"]
 ---
 
-You might have read about [Lemon, NN/G’s institutional AI agent,](/blog/post-1/) and thought: *why didn’t they just use an off-the-shelf tool? Why build from scratch? OpenCLAW???*
+You might have read about [Lemon, NN/G’s institutional AI agent,](/blog/i-built-my-companys-institutional-ai-agent/) and thought: *why didn’t they just use an off-the-shelf tool? Why build from scratch? OpenCLAW???*
 
 Okay, yes, I considered it. It wasn’t the right choice for us.
 
