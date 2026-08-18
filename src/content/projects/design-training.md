@@ -14,6 +14,6 @@ I've done a lot while at NN/G related to training, but here's a non-exhaustive l
 - Designed, built, and launched NN/G's second course on AI, Designing AI Experiences, which has been NN/G's most popular course since launch in Spring 2025.
 - Revitalized another course on Research and AI
 - Developed and helped launch two self-paced courses since late 2025
-- Won third place speaker prize for my talk at WaysConf 2025 in Krakow, Poland
+- Won third place speaker prize for [my talk at WaysConf 2025](https://www.youtube.com/watch?v=guGAfmV_NSM&pp=ygUOQ2FsZWIgU3BvbmhlaW0%3D) in Krakow, Poland
 - Given a keynote speech in Venice Italy on AI
 - Written myriad articles and recorded myriad youtube videos on various UX topics

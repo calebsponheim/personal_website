@@ -30,7 +30,7 @@ test('the home page exposes canonical and social metadata', async ({ page }) => 
   );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
-    /applied researcher and AI expert/i,
+    /leads applied AI and UX work/i,
   );
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     'content',
@@ -48,6 +48,45 @@ test('the home page exposes canonical and social metadata', async ({ page }) => 
     'content',
     /Caleb Sponheim/,
   );
+});
+
+test('the home page offers a local resume download and a direct mailto', async ({
+  page,
+}) => {
+  await page.goto('/');
+
+  await expect(page.locator('a[href^="mailto:"]')).toHaveAttribute(
+    'href',
+    'mailto:caleb.sponheim@gmail.com',
+  );
+
+  const resume = page.locator('a[href="/resume/caleb-sponheim-resume.pdf"]');
+  await expect(resume).toHaveAttribute('download', '');
+
+  // The PDF is served from this site, not Google Docs — no login wall.
+  const response = await page.request.get('/resume/caleb-sponheim-resume.pdf');
+  expect(response.status()).toBe(200);
+  expect(response.headers()['content-type']).toContain('pdf');
+});
+
+test('the home page features one project without duplicating it in the list', async ({
+  page,
+}) => {
+  await page.goto('/');
+
+  const featured = page.locator('.featured');
+  await expect(featured.getByRole('heading', { name: 'Lemon' })).toBeVisible();
+  await expect(
+    featured.getByRole('link', { name: /Read the case study/ }),
+  ).toHaveAttribute('href', '/projects/lemon/');
+
+  // Lemon is promoted above, so it must not also appear under Selected work.
+  const selectedWork = page.locator('section.panel', {
+    has: page.getByRole('heading', { name: 'Selected work' }),
+  });
+  await expect(
+    selectedWork.locator('a[href="/projects/lemon/"]'),
+  ).toHaveCount(0);
 });
 
 test('unknown routes use the custom not-found page', async ({ page }) => {

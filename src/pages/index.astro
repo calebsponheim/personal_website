@@ -3,10 +3,20 @@ import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import portrait from "../assets/portrait.webp";
+// Home page prose lives in Markdown rather than in this component so the copy
+// can be edited (or edited through a Git-based CMS) without touching JSX.
+// `src/copy/` sits outside `src/pages/`, so it never becomes a route.
+import * as homepageCopy from "../copy/home.md";
 
-const RESUME_URL =
-    "https://docs.google.com/document/d/1rlU65uZEFFuvl20uaJZzaqjlPQYRzaJCtwfJ5-daZaM/edit?usp=sharing";
+const RESUME_URL = "/resume/caleb-sponheim-resume.pdf";
 const EMAIL = "caleb.sponheim@gmail.com";
+
+const {
+    availability,
+    featuredSlug,
+    featuredEyebrow,
+    featuredBlurb,
+} = homepageCopy.frontmatter;
 
 // Same draft filter as every other view of these collections — drafts show
 // in dev, are hidden at build.
@@ -20,12 +30,17 @@ const recentPosts = (
 
 // Projects keep their curated `order` here — the home page shows the top of
 // that list, which is the point of hand-setting it.
-const featuredProjects = (
+const allProjects = (
     await getCollection("projects", ({ data }) => {
         return import.meta.env.DEV || !data.draft;
     })
-)
-    .sort((a, b) => a.data.order - b.data.order)
+).sort((a, b) => a.data.order - b.data.order);
+
+// The featured project gets its own pitch above the list, so drop it from the
+// list to avoid showing the same entry twice.
+const featured = allProjects.find((entry) => entry.id === featuredSlug) ?? null;
+const listedProjects = allProjects
+    .filter((entry) => entry.id !== featured?.id)
     .slice(0, 4);
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -36,8 +51,8 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 ---
 
 <Layout
-    title="Caleb Sponheim, PhD — Applied researcher and AI expert"
-    description="Applied researcher and AI expert. Senior Experience Specialist and AI Lead at NN/G."
+    title="Caleb Sponheim — Applied AI & UX Leader"
+    description="Caleb Sponheim leads applied AI and UX work that turns emerging technology into useful, trustworthy products, operational systems, and training."
 >
     <div class="home">
         <Image
@@ -51,36 +66,32 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
         <div class="content">
             <h1>Caleb Sponheim, PhD</h1>
 
-            <p>
-                I am an applied researcher and AI expert. Right now, I'm a
-                Senior Experience Specialist and AI Lead at{" "}
-                <a href="https://www.nngroup.com/people/caleb-sponheim/">NN/G</a
-                >.
-            </p>
-
-            <p>
-                I've been cited as an expert on AI in publications including{" "}
-                <a href="https://time.com/7346052/problem-ai-flattering-us/"
-                    >Time</a
-                >,{" "}
-                <a
-                    href="https://www.axios.com/2025/07/07/ai-sycophancy-chatbots-mental-health"
-                    >Axios</a
-                >,{" "}
-                <a href="https://futurism.com/sycophancy-chatbots-ai-problem"
-                    >Futurism</a
-                >, and{" "}
-                <a
-                    href="https://www.cnet.com/tech/services-and-software/apples-genmoji-might-be-a-prompt-engineering-training-tool-in-disguise/"
-                    >CNET</a
-                >.
-            </p>
+            <div class="proposition">
+                <homepageCopy.Content />
+            </div>
 
             <p class="actions">
-                <a class="button" href={RESUME_URL}>See Caleb's resume →</a>
+                <a class="button" href={RESUME_URL} download>
+                    Download résumé <span class="button-hint">(PDF)</span>
+                </a>
             </p>
         </div>
     </div>
+
+    {
+        featured && (
+            <aside class="featured" aria-labelledby="featured-title">
+                <p class="eyebrow">{featuredEyebrow}</p>
+                <h2 id="featured-title">{featured.data.title}</h2>
+                <p>{featuredBlurb}</p>
+                <p class="featured-link">
+                    <a href={`/projects/${featured.id}/`}>
+                        Read the case study <span aria-hidden="true">→</span>
+                    </a>
+                </p>
+            </aside>
+        )
+    }
 
     {
         recentPosts.length > 0 && (
@@ -118,7 +129,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     }
 
     {
-        featuredProjects.length > 0 && (
+        listedProjects.length > 0 && (
             <section class="panel" aria-labelledby="selected-work">
                 <div class="panel-head">
                     <h2 id="selected-work">Selected work</h2>
@@ -127,7 +138,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
                     </a>
                 </div>
                 <ul class="teaser-list">
-                    {featuredProjects.map((project) => {
+                    {listedProjects.map((project) => {
                         const isExternal = Boolean(project.data.externalUrl);
                         return (
                             <li>
@@ -183,10 +194,11 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 
     <section class="contact" aria-labelledby="get-in-touch">
         <h2 id="get-in-touch">Want to get in touch?</h2>
+        {availability && <p class="availability">{availability}</p>}
         <p>
-            If you have an opportunity or introduction, shoot me a line at{" "}
-            <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. I will respond to messages
-            that are a good match for my schedule and interests. Thanks!
+            Email me at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. I will respond
+            to messages that are a good match for my schedule and interests.
+            Thanks!
         </p>
     </section>
 </Layout>
@@ -240,6 +252,58 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
         grid-area: content;
     }
 
+    /* --- Positioning statement --- */
+
+    /* The lede runs large and serif; the credential bullets drop to sans at
+       UI scale so they read as supporting evidence, not more prose. */
+    .proposition {
+        font-family: var(--font-serif);
+        font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+        line-height: 1.35;
+        max-width: var(--prose-width);
+    }
+
+    .proposition :global(p) {
+        margin-bottom: 1.5rem;
+    }
+
+    .proposition :global(ul) {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.45rem 1.25rem;
+        color: var(--color-text-muted);
+        font-family: var(--font-sans);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 520px) {
+        .proposition :global(ul) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .proposition :global(ul li) {
+        position: relative;
+        padding-left: 0.8rem;
+    }
+
+    /* Custom dot marker — `list-style: none` above drops the default so the
+       two-column grid can control alignment. */
+    .proposition :global(ul li::before) {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.65em;
+        width: 0.25rem;
+        height: 0.25rem;
+        border-radius: 50%;
+        background: var(--color-link);
+    }
+
     .actions {
         margin: 1.75rem 0 0;
     }
@@ -247,6 +311,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     .button {
         display: inline-flex;
         align-items: center;
+        gap: 0.35rem;
         min-height: 44px;
         padding: 0 1.125rem;
         border-radius: 0.5rem;
@@ -260,6 +325,49 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
         /* Darken via the text color rather than a second brand token —
            keeps the palette to one accent. */
         background: var(--color-text);
+    }
+
+    .button-hint {
+        font-weight: 400;
+        opacity: 0.8;
+        font-size: 0.9em;
+    }
+
+    /* --- Featured project --- */
+
+    .featured {
+        margin-top: 3.5rem;
+        padding: 1.25rem 1.5rem;
+        border: 1px solid var(--color-border);
+        /* Accent rule on the leading edge marks this as the one promoted
+           item without needing a filled background. */
+        border-left: 3px solid var(--color-link);
+        border-radius: 0 0.5rem 0.5rem 0;
+        max-width: var(--prose-width);
+    }
+
+    .eyebrow {
+        margin: 0 0 0.25rem;
+        color: var(--color-text-muted);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .featured h2 {
+        font-family: var(--font-serif);
+        font-size: 1.4rem;
+        font-weight: 500;
+        margin: 0 0 0.35rem;
+    }
+
+    .featured p {
+        margin: 0 0 0.65rem;
+    }
+
+    .featured-link {
+        margin: 0;
     }
 
     /* --- Recent writing / Selected work --- */
@@ -362,7 +470,13 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
         font-weight: 600;
     }
 
-    .contact p {
+    .availability {
+        margin: 0 0 0.75rem;
+        color: var(--color-text-muted);
+        font-size: 0.95rem;
+    }
+
+    .contact p:last-child {
         margin: 0;
     }
 </style>
