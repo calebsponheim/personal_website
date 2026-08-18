@@ -1,6 +1,7 @@
 ---
 layout: ../layouts/Layout.astro
 title: "About · Caleb Sponheim"
+variant: prose
 ---
 
 # About

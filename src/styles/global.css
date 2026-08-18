@@ -1,12 +1,24 @@
 :root {
   --color-text: #1a1a1a;
-  --color-text-muted: #6b7280;
+  /* Muted grey is deliberately darker than a typical #6b7280: it has to
+     clear 4.5:1 against `--color-surface`, not just against white, because
+     tag pills put muted text on the grey surface. */
+  --color-text-muted: #5b6270;
   --color-link: #3b3bbf;
   --color-border: #e5e5e5;
   --color-bg: #ffffff;
+  /* Raised surfaces — tag pills, code blocks, callouts. Tokenized so the
+     dark palette below can swap them in one place. */
+  --color-surface: #f4f4f5;
+  --color-surface-hover: #e8e8ea;
+  --color-focus: #3b3bbf;
   /* The one knob for the site logo's color. Black by default; change here only. */
   --logo-color: #000;
   --content-width: 52rem;
+  /* Long-form measure — ~65-75 characters at the body size. Shared by blog
+     posts, project pages, and bare Markdown pages so prose never runs to
+     the full 52rem content column. */
+  --prose-width: 38rem;
   --font-sans:
     var(--font-inter),
     ui-sans-serif,
@@ -19,6 +31,22 @@
     Georgia,
     "Times New Roman",
     serif;
+}
+
+/* Dark palette follows the OS setting. Only the tokens change — no
+   component needs a dark-specific rule. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #ececee;
+    --color-text-muted: #a2a8b4;
+    --color-link: #a9b4ff;
+    --color-border: #2e3036;
+    --color-bg: #16171a;
+    --color-surface: #22242a;
+    --color-surface-hover: #2c2f36;
+    --color-focus: #a9b4ff;
+    --logo-color: #ececee;
+  }
 }
 
 *,
@@ -45,6 +73,23 @@ main {
   max-width: var(--content-width);
   margin: 0 auto;
   padding: 3rem 1.5rem;
+}
+
+/* Bare Markdown pages (about.md) route their body straight into <slot />,
+   so there's no wrapper to constrain. Cap the children instead of the
+   <main> itself — narrowing <main> would re-center it and break alignment
+   with the header and footer, which stay on the 52rem column. */
+main.prose-page > * {
+  max-width: var(--prose-width);
+}
+
+main.prose-page > p,
+main.prose-page > ul,
+main.prose-page > ol,
+main.prose-page > blockquote {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.7;
 }
 
 h1 {
@@ -75,6 +120,60 @@ a {
   color: var(--color-link);
 }
 
+/* Hover thickens the underline rather than removing it — dropping the
+   underline on hover inverts the usual affordance signal. */
 a:hover {
-  text-decoration: none;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+/* Single global focus ring. `:focus-visible` keeps it off mouse clicks
+   while guaranteeing keyboard users always see where they are. */
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Screen-reader-only text that stays in the accessibility tree. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link: off-screen until focused, then pinned to the top-left. */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 0.875rem;
+  background: var(--color-bg);
+  color: var(--color-link);
+  border: 1px solid var(--color-border);
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  transform: translateY(-150%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }

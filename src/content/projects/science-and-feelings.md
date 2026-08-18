@@ -3,6 +3,8 @@ title: "Science and Feelings"
 description: "I ran a podcast for 6 months where I interviewed my scientist friends about their identities"
 order: 60
 dateLabel: "2018"
+startYear: 2018
+endYear: 2018
 heroImage: ./science-and-feelings/cover.webp
 heroImageAlt: "Science and Feelings podcast cover art: a crying microscope inside a coral circle, on a slate-blue background"
 draft: false

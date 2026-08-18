@@ -10,6 +10,17 @@ const projects = (
         return import.meta.env.DEV || !data.draft;
     })
 ).sort((a, b) => a.data.order - b.data.order);
+
+// Stand-in "end year" for work that hasn't ended. Sorting newest-first has
+// to rank ongoing projects above anything already finished, and a sentinel
+// keeps the comparators to plain number math on both server and client.
+const ONGOING = 9999;
+
+const SORTS = [
+    { value: "relevance", label: "Relevance" },
+    { value: "newest", label: "Date (newest first)" },
+    { value: "oldest", label: "Date (oldest first)" },
+];
 ---
 
 <Layout
@@ -29,69 +40,216 @@ const projects = (
         projects.length === 0 ? (
             <p>Projects coming soon.</p>
         ) : (
-            <ul class="project-list">
-                {projects.map((project) => {
-                    const isExternal = Boolean(project.data.externalUrl);
-                    const href = isExternal
-                        ? project.data.externalUrl
-                        : `/projects/${project.id}/`;
-                    const linkProps = isExternal
-                        ? {
-                              target: "_blank",
-                              rel: "noopener noreferrer",
-                          }
-                        : {};
-                    return (
-                        <li class="project-item">
-                            <a
-                                href={href}
-                                class="project-link"
-                                {...linkProps}
+            <>
+                {/* Hidden until the script runs — a sort control that can't
+                    sort is worse than no control at all. */}
+                <div class="sort-bar" data-sort-bar hidden>
+                    <label for="project-sort">Sort by</label>
+                    <select id="project-sort" data-sort-control>
+                        {SORTS.map((sort) => (
+                            <option value={sort.value}>{sort.label}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <p
+                    class="visually-hidden"
+                    role="status"
+                    aria-live="polite"
+                    data-sort-status
+                />
+
+                <ul class="project-list" data-project-list>
+                    {projects.map((project) => {
+                        const isExternal = Boolean(project.data.externalUrl);
+                        const href = isExternal
+                            ? project.data.externalUrl
+                            : `/projects/${project.id}/`;
+                        const linkProps = isExternal
+                            ? {
+                                  target: "_blank",
+                                  rel: "noopener noreferrer",
+                              }
+                            : {};
+                        return (
+                            <li
+                                class="project-item"
+                                data-order={project.data.order}
+                                data-start={
+                                    project.data.startYear ??
+                                    project.data.endYear ??
+                                    ONGOING
+                                }
+                                data-end={project.data.endYear ?? ONGOING}
                             >
-                                <h2 class="project-title">
-                                    {project.data.title}
-                                    {isExternal && (
-                                        <span
-                                            class="external-icon"
-                                            aria-hidden="true"
-                                        >
-                                            {" ↗"}
+                                <a
+                                    href={href}
+                                    class="project-link"
+                                    {...linkProps}
+                                >
+                                    <h2 class="project-title">
+                                        {project.data.title}
+                                        {isExternal && (
+                                            <>
+                                                <span
+                                                    class="external-icon"
+                                                    aria-hidden="true"
+                                                >
+                                                    {" ↗"}
+                                                </span>
+                                                <span class="visually-hidden">
+                                                    {" "}
+                                                    (opens in a new tab)
+                                                </span>
+                                            </>
+                                        )}
+                                    </h2>
+                                    {project.data.dateLabel && (
+                                        <span class="project-meta">
+                                            {project.data.dateLabel}
                                         </span>
                                     )}
-                                </h2>
-                                {project.data.dateLabel && (
-                                    <span class="project-meta">
-                                        {project.data.dateLabel}
-                                    </span>
-                                )}
-                                {project.data.description && (
-                                    <p class="project-description">
-                                        {project.data.description}
-                                    </p>
-                                )}
-                            </a>
-                        </li>
-                    );
-                })}
-            </ul>
+                                    {project.data.description && (
+                                        <p class="project-description">
+                                            {project.data.description}
+                                        </p>
+                                    )}
+                                </a>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </>
         )
     }
 </Layout>
+
+<script>
+    const list = document.querySelector<HTMLElement>("[data-project-list]");
+    const bar = document.querySelector<HTMLElement>("[data-sort-bar]");
+    const control = document.querySelector<HTMLSelectElement>(
+        "[data-sort-control]",
+    );
+    const status = document.querySelector<HTMLElement>("[data-sort-status]");
+
+    if (list && bar && control) {
+        const items = Array.from(list.children) as HTMLElement[];
+        const key = (el: HTMLElement, name: string) =>
+            Number(el.dataset[name] ?? 0);
+
+        // Every comparator falls back to `order` so ties resolve to the
+        // hand-curated sequence instead of whatever order the DOM happened
+        // to be in — Array.prototype.sort is stable, but relying on that
+        // across two different upstream sorts is fragile.
+        const comparators: Record<
+            string,
+            (a: HTMLElement, b: HTMLElement) => number
+        > = {
+            relevance: (a, b) => key(a, "order") - key(b, "order"),
+            newest: (a, b) =>
+                key(b, "end") - key(a, "end") ||
+                key(b, "start") - key(a, "start") ||
+                key(a, "order") - key(b, "order"),
+            oldest: (a, b) =>
+                key(a, "start") - key(b, "start") ||
+                key(a, "end") - key(b, "end") ||
+                key(a, "order") - key(b, "order"),
+        };
+
+        const labels: Record<string, string> = {
+            relevance: "Relevance",
+            newest: "Date, newest first",
+            oldest: "Date, oldest first",
+        };
+
+        function apply(name: string, announce: boolean) {
+            const compare = comparators[name] ?? comparators.relevance;
+            // Re-append the real nodes rather than shuffling CSS `order`, so
+            // DOM order stays identical to visual order — tab sequence and
+            // screen-reader traversal follow what's on screen.
+            const fragment = document.createDocumentFragment();
+            for (const item of items.slice().sort(compare)) {
+                fragment.appendChild(item);
+            }
+            list!.appendChild(fragment);
+
+            if (announce && status) {
+                status.textContent = `Projects sorted by ${labels[name] ?? name}.`;
+            }
+        }
+
+        // Honor ?sort= on load so a chosen order is linkable and survives
+        // the back button.
+        const requested = new URLSearchParams(location.search).get("sort");
+        const initial =
+            requested && requested in comparators ? requested : "relevance";
+        control.value = initial;
+        if (initial !== "relevance") apply(initial, false);
+
+        control.addEventListener("change", () => {
+            const next = control.value;
+            apply(next, true);
+
+            const url = new URL(location.href);
+            if (next === "relevance") {
+                url.searchParams.delete("sort");
+            } else {
+                url.searchParams.set("sort", next);
+            }
+            history.replaceState(null, "", url);
+        });
+
+        bar.hidden = false;
+    }
+</script>
 
 <style>
     .lede {
         margin: 0 0 2rem;
         color: var(--color-text-muted);
         font-size: 1.05rem;
+        max-width: var(--prose-width);
+    }
+
+    .sort-bar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem 0.75rem;
+        margin: 0 0 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .sort-bar label {
+        color: var(--color-text-muted);
+    }
+
+    .sort-bar select {
+        min-height: 44px;
+        padding: 0 0.625rem;
+        font: inherit;
+        color: var(--color-text);
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: 0.375rem;
     }
 
     .project-list {
         list-style: none;
         padding: 0;
-        margin: 2rem 0 0;
+        margin: 0;
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+    }
+
+    /* Hairline rules instead of bare gaps — with seven entries and no
+       dividers the rows blurred into one another. */
+    .project-item {
+        border-top: 1px solid var(--color-border);
+    }
+
+    .project-item:last-child {
+        border-bottom: 1px solid var(--color-border);
     }
 
     /* Two-column grid: title on the left, dateLabel right-aligned on the
@@ -99,19 +257,28 @@ const projects = (
        the left column on a second row. */
     .project-link {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: minmax(0, 1fr) auto;
         column-gap: 1.5rem;
         align-items: baseline;
         color: inherit;
         text-decoration: none;
+        /* Padding lives on the link so the whole row is the hit area. */
+        padding: 1rem 0;
+    }
+
+    .project-link:hover {
+        background: var(--color-surface);
     }
 
     .project-title {
         grid-column: 1;
         grid-row: 1;
         margin: 0;
-        font-size: 1.05rem;
-        font-weight: 500;
+        /* Bumped from 1.05rem — titles were barely distinguishable from the
+           0.9rem descriptions on the page that carries the portfolio. */
+        font-size: 1.15rem;
+        font-weight: 600;
+        line-height: 1.35;
         color: var(--color-link);
     }
 
@@ -132,6 +299,7 @@ const projects = (
         color: var(--color-text-muted);
         font-size: 0.9rem;
         line-height: 1.5;
+        max-width: var(--prose-width);
     }
 
     .project-link:hover .project-title {

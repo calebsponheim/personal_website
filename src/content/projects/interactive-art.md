@@ -3,6 +3,8 @@ title: "Interactive Art"
 description: "Three immersive light-and-dark installations made in 2014 as a Mentored Advanced Project at Grinnell College."
 order: 50
 dateLabel: "2014"
+startYear: 2014
+endYear: 2014
 heroImage: ./interactive-art/cover.jpg
 heroImageAlt: "Two young men crouched on either side of a vertical strip of light in a darkened gallery, smiling at the camera"
 draft: false

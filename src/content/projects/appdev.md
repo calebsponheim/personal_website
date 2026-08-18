@@ -3,6 +3,8 @@ title: "Undergraduate UX Research Work"
 description: "As Design Lead at Grinnell AppDev, I hired and trained the group's UI/UX designers and shaped the interaction design for a handful of apps built for campus life."
 order: 45
 dateLabel: "2014–2015"
+startYear: 2014
+endYear: 2015
 heroImage: ./appdev/dorms-db-roomtype.webp
 heroImageAlt: "DormsDB app landing screen with a floor picker over an illustrated campus skyline, in Grinnell AppDev's green brand palette"
 draft: false

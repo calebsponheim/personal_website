@@ -3,6 +3,7 @@ title: "NN/G Articles & Videos"
 description: "My work as Senior Experience Specialist and AI Lead at Nielsen Norman Group."
 order: 40
 dateLabel: "Ongoing"
+startYear: 2023
 externalUrl: "https://www.nngroup.com/people/caleb-sponheim/"
 ---
 

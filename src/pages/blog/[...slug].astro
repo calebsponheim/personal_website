@@ -8,17 +8,30 @@ import { tagSlug } from "../../utils/tags";
 // is a rest route, so the same file would also handle nested folders
 // like `src/content/blog/2026/post.md` → `/blog/2026/post`.
 export async function getStaticPaths() {
-    const posts = await getCollection("blog", ({ data }) => {
-        return import.meta.env.DEV || !data.draft;
-    });
-    return posts.map((post) => ({
+    const posts = (
+        await getCollection("blog", ({ data }) => {
+            return import.meta.env.DEV || !data.draft;
+        })
+    ).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    return posts.map((post, index) => ({
         params: { slug: post.id },
-        props: { post },
+        props: {
+            post,
+            // The list is newest-first, so the neighbour at `index - 1` is
+            // the newer post and `index + 1` is the older one.
+            newer: posts[index - 1] ?? null,
+            older: posts[index + 1] ?? null,
+        },
     }));
 }
 
-type Props = { post: CollectionEntry<"blog"> };
-const { post } = Astro.props;
+type Props = {
+    post: CollectionEntry<"blog">;
+    newer: CollectionEntry<"blog"> | null;
+    older: CollectionEntry<"blog"> | null;
+};
+const { post, newer, older } = Astro.props;
 
 // `render()` returns a `<Content />` component that emits the parsed
 // Markdown body, plus useful metadata (headings list, etc.) we could
@@ -55,8 +68,18 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
                 <time datetime={post.data.pubDate.toISOString()}>
                     {dateFormatter.format(post.data.pubDate)}
                 </time>
-                {post.data.author && <span>· by {post.data.author}</span>}
-                <span>· {readingMinutes} min read</span>
+                {
+                    post.data.author && (
+                        <>
+                            <span class="dot" aria-hidden="true">
+                                ·
+                            </span>
+                            <span>by {post.data.author}</span>
+                        </>
+                    )
+                }
+                <span class="dot" aria-hidden="true">·</span>
+                <span>{readingMinutes} min read</span>
             </p>
             {
                 post.data.canonicalUrl && (
@@ -99,6 +122,35 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
                     </ul>
                 )
             }
+            {
+                (older || newer) && (
+                    <nav class="post-nav" aria-label="More posts">
+                        {older && (
+                            <a class="post-nav-link" href={`/blog/${older.id}/`}>
+                                <span class="post-nav-label">
+                                    <span aria-hidden="true">←</span> Older post
+                                </span>
+                                <span class="post-nav-title">
+                                    {older.data.title}
+                                </span>
+                            </a>
+                        )}
+                        {newer && (
+                            <a
+                                class="post-nav-link is-newer"
+                                href={`/blog/${newer.id}/`}
+                            >
+                                <span class="post-nav-label">
+                                    Newer post <span aria-hidden="true">→</span>
+                                </span>
+                                <span class="post-nav-title">
+                                    {newer.data.title}
+                                </span>
+                            </a>
+                        )}
+                    </nav>
+                )
+            }
             <p class="back-link">
                 <a href="/blog">← Back to all posts</a>
             </p>
@@ -107,9 +159,12 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
 </Layout>
 
 <style>
+    /* Left-aligned, not centred. Centring a 38rem article inside the 52rem
+       content column shifted the h1 70px right of the h1 on /blog, so the
+       heading visibly jumped when you clicked into a post. */
     article {
-        max-width: 38rem;
-        margin: 0 auto;
+        max-width: var(--prose-width);
+        margin: 0;
     }
 
     .post-header {
@@ -135,7 +190,7 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
     .canonical-note {
         margin: 0 0 1.5rem;
         padding: 0.75rem 1rem;
-        background: #f5f5f5;
+        background: var(--color-surface);
         border-radius: 0.5rem;
         font-size: 0.875rem;
         color: var(--color-text-muted);
@@ -221,14 +276,14 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
     }
 
     .post-body :global(code) {
-        background: #f5f5f5;
+        background: var(--color-surface);
         padding: 0.125rem 0.375rem;
         border-radius: 0.25rem;
         font-size: 0.95em;
     }
 
     .post-body :global(pre) {
-        background: #f5f5f5;
+        background: var(--color-surface);
         padding: 1rem;
         border-radius: 0.5rem;
         overflow-x: auto;
@@ -265,7 +320,7 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
     .post-tags a {
         display: inline-block;
         padding: 0.25rem 0.625rem;
-        background: #f5f5f5;
+        background: var(--color-surface);
         border-radius: 999px;
         color: var(--color-text-muted);
         text-decoration: none;
@@ -273,8 +328,66 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
     }
 
     .post-tags a:hover {
-        background: #ebebeb;
+        background: var(--color-surface-hover);
         color: var(--color-text);
+    }
+
+    .post-meta .dot {
+        opacity: 0.6;
+    }
+
+    .post-nav {
+        display: grid;
+        gap: 1rem;
+        margin: 0 0 1.75rem;
+    }
+
+    @media (min-width: 560px) {
+        .post-nav {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    .post-nav-link {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0.875rem 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: 0.5rem;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .post-nav-link:hover {
+        background: var(--color-surface);
+    }
+
+    /* When there's no older post, keep the newer one in the right-hand
+       column so the arrow direction still matches its position. */
+    .post-nav-link.is-newer {
+        grid-column: 2;
+        text-align: right;
+    }
+
+    .post-nav-label {
+        font-size: 0.8rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+    }
+
+    .post-nav-title {
+        font-family: var(--font-sans);
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.35;
+        color: var(--color-link);
+    }
+
+    .post-nav-link:hover .post-nav-title {
+        text-decoration: underline;
+        text-underline-offset: 3px;
     }
 
     .back-link {

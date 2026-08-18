@@ -58,6 +58,13 @@ const projects = defineCollection({
             // free text so values like "Ongoing", "2018–2024", or
             // "June 2026" all work without fighting a Date object.
             dateLabel: z.string().optional(),
+            // Machine-readable sort keys. Kept separate from `dateLabel`
+            // precisely because that field is prose ("Ongoing", "2026–present")
+            // and can't be sorted — the /projects sort control needs numbers.
+            startYear: z.number().int().optional(),
+            // Omit for work that hasn't ended. The sort treats a missing
+            // `endYear` as "still running", which ranks it as most recent.
+            endYear: z.number().int().optional(),
             heroImage: image().optional(),
             heroImageAlt: z.string().optional(),
             // If set, the index card becomes an outbound link (no sub-page

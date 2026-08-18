@@ -14,10 +14,19 @@ interface Props {
     // Use "article" for blog posts so social previews show the right card.
     ogType?: "website" | "article";
     publishedTime?: Date;
+    // "prose" constrains bare Markdown body content to the long-form
+    // measure. Astro pages pass it directly; Markdown pages set it in
+    // frontmatter (see `frontmatter` below).
+    variant?: "default" | "prose";
     // `frontmatter` is automatically passed by Markdown pages that use
     // `layout: ../layouts/Layout.astro` — we accept it as a fallback for
-    // `title` (other meta is always passed explicitly from a wrapper).
-    frontmatter?: { title?: string; description?: string };
+    // `title` and `variant` (other meta is always passed explicitly from
+    // a wrapper).
+    frontmatter?: {
+        title?: string;
+        description?: string;
+        variant?: "default" | "prose";
+    };
 }
 
 const {
@@ -26,6 +35,7 @@ const {
     image,
     ogType = "website",
     publishedTime,
+    variant,
     frontmatter,
 } = Astro.props;
 
@@ -37,6 +47,7 @@ const DEFAULT_DESCRIPTION =
 const DEFAULT_OG_IMAGE = "/og/site.png";
 
 const pageTitle = title ?? frontmatter?.title ?? SITE_NAME;
+const pageVariant = variant ?? frontmatter?.variant ?? "default";
 const pageDescription =
     description ?? frontmatter?.description ?? DEFAULT_DESCRIPTION;
 const shareImage = image ?? DEFAULT_OG_IMAGE;
@@ -113,8 +124,12 @@ const absoluteImage = Astro.site
         />
     </head>
     <body>
+        <a class="skip-link" href="#main">Skip to content</a>
         <Header />
-        <main>
+        <main
+            id="main"
+            class={pageVariant === "prose" ? "prose-page" : undefined}
+        >
             <slot />
         </main>
         <Footer />

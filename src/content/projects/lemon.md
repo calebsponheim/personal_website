@@ -3,6 +3,7 @@ title: "Lemon"
 description: "An institutional AI agent for NN/G"
 order: 10
 dateLabel: "2026–present"
+startYear: 2026
 heroImage: ./lemon/cover.jpg
 heroImageAlt: "Stylized illustration of a yellow lemon among green leaves"
 draft: false

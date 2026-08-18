@@ -1,16 +1,50 @@
 ---
 import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import portrait from "../assets/portrait.webp";
+
+const RESUME_URL =
+    "https://docs.google.com/document/d/1rlU65uZEFFuvl20uaJZzaqjlPQYRzaJCtwfJ5-daZaM/edit?usp=sharing";
+const EMAIL = "caleb.sponheim@gmail.com";
+
+// Same draft filter as every other view of these collections — drafts show
+// in dev, are hidden at build.
+const recentPosts = (
+    await getCollection("blog", ({ data }) => {
+        return import.meta.env.DEV || !data.draft;
+    })
+)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 3);
+
+// Projects keep their curated `order` here — the home page shows the top of
+// that list, which is the point of hand-setting it.
+const featuredProjects = (
+    await getCollection("projects", ({ data }) => {
+        return import.meta.env.DEV || !data.draft;
+    })
+)
+    .sort((a, b) => a.data.order - b.data.order)
+    .slice(0, 4);
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+});
 ---
 
-<Layout title="Caleb Sponheim">
+<Layout
+    title="Caleb Sponheim, PhD — Applied researcher and AI expert"
+    description="Applied researcher and AI expert. Senior Experience Specialist and AI Lead at NN/G."
+>
     <div class="home">
         <Image
             src={portrait}
             alt="Portrait of Caleb Sponheim"
             widths={[200, 400, 600]}
-            sizes="(min-width: 720px) 224px, 60vw"
+            sizes="(min-width: 720px) 224px, 88px"
             class="portrait"
         />
 
@@ -42,55 +76,162 @@ import portrait from "../assets/portrait.webp";
                 >.
             </p>
 
-            <p class="contact">
-                <strong>Want to get in touch?</strong>
-                If you have an opportunity or introduction, shoot me a line at{" "}
-                <em>caleb [dot] sponheim [at] gmail.com</em>. I will respond to
-                messages that are a good match for my schedule and interests.
-                Thanks!
-            </p>
-
-            <p>
-                <a
-                    class="cta"
-                    href="https://docs.google.com/document/d/1rlU65uZEFFuvl20uaJZzaqjlPQYRzaJCtwfJ5-daZaM/edit?usp=sharing"
-                >
-                    See Caleb's Resume →
-                </a>
+            <p class="actions">
+                <a class="button" href={RESUME_URL}>See Caleb's resume →</a>
             </p>
         </div>
     </div>
+
+    {
+        recentPosts.length > 0 && (
+            <section class="panel" aria-labelledby="recent-writing">
+                <div class="panel-head">
+                    <h2 id="recent-writing">Recent writing</h2>
+                    <a class="panel-more" href="/blog">
+                        All posts <span aria-hidden="true">→</span>
+                    </a>
+                </div>
+                <ul class="teaser-list">
+                    {recentPosts.map((post) => (
+                        <li>
+                            <a class="teaser" href={`/blog/${post.id}/`}>
+                                <span class="teaser-title">
+                                    {post.data.title}
+                                </span>
+                                <time
+                                    class="teaser-meta"
+                                    datetime={post.data.pubDate.toISOString()}
+                                >
+                                    {dateFormatter.format(post.data.pubDate)}
+                                </time>
+                            </a>
+                            {post.data.description && (
+                                <p class="teaser-description">
+                                    {post.data.description}
+                                </p>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        )
+    }
+
+    {
+        featuredProjects.length > 0 && (
+            <section class="panel" aria-labelledby="selected-work">
+                <div class="panel-head">
+                    <h2 id="selected-work">Selected work</h2>
+                    <a class="panel-more" href="/projects">
+                        All projects <span aria-hidden="true">→</span>
+                    </a>
+                </div>
+                <ul class="teaser-list">
+                    {featuredProjects.map((project) => {
+                        const isExternal = Boolean(project.data.externalUrl);
+                        return (
+                            <li>
+                                <a
+                                    class="teaser"
+                                    href={
+                                        isExternal
+                                            ? project.data.externalUrl
+                                            : `/projects/${project.id}/`
+                                    }
+                                    {...(isExternal
+                                        ? {
+                                              target: "_blank",
+                                              rel: "noopener noreferrer",
+                                          }
+                                        : {})}
+                                >
+                                    <span class="teaser-title">
+                                        {project.data.title}
+                                        {isExternal && (
+                                            <>
+                                                <span
+                                                    class="external-icon"
+                                                    aria-hidden="true"
+                                                >
+                                                    {" ↗"}
+                                                </span>
+                                                <span class="visually-hidden">
+                                                    {" "}
+                                                    (opens in a new tab)
+                                                </span>
+                                            </>
+                                        )}
+                                    </span>
+                                    {project.data.dateLabel && (
+                                        <span class="teaser-meta">
+                                            {project.data.dateLabel}
+                                        </span>
+                                    )}
+                                </a>
+                                {project.data.description && (
+                                    <p class="teaser-description">
+                                        {project.data.description}
+                                    </p>
+                                )}
+                            </li>
+                        );
+                    })}
+                </ul>
+            </section>
+        )
+    }
+
+    <section class="contact" aria-labelledby="get-in-touch">
+        <h2 id="get-in-touch">Want to get in touch?</h2>
+        <p>
+            If you have an opportunity or introduction, shoot me a line at{" "}
+            <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. I will respond to messages
+            that are a good match for my schedule and interests. Thanks!
+        </p>
+    </section>
 </Layout>
 
 <style>
+    /* Single column on narrow screens: putting the portrait in its own
+       column here squeezed the heading onto three lines and the prose to
+       ~28 characters. It stacks above the text instead. */
     .home {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         grid-template-areas:
             "portrait"
             "content";
-        gap: 2rem;
+        gap: 1.25rem;
+        align-items: start;
     }
 
     @media (min-width: 720px) {
         .home {
             grid-template-columns: minmax(0, 1fr) 14rem;
             grid-template-areas: "content portrait";
-            gap: 3rem;
-            align-items: start;
+            column-gap: 3rem;
         }
     }
 
+    /* The portrait used to be `display: none` below 720px, so the most-used
+       viewport never saw the face on a personal site. Keeping it displayed at
+       every width also fixes the old bug where the hidden grid item collapsed
+       its row but kept the 2rem `row-gap`, leaving 32px of phantom space
+       above the h1. */
     .portrait {
-        display: none;
+        grid-area: portrait;
+        width: 5.5rem;
+        height: 5.5rem;
+        object-fit: cover;
+        border-radius: 999px;
     }
 
     @media (min-width: 720px) {
         .portrait {
-            display: block;
-            grid-area: portrait;
             width: 12rem;
             height: auto;
+            border-radius: 0;
+            object-fit: fill;
             justify-self: center;
         }
     }
@@ -99,16 +240,129 @@ import portrait from "../assets/portrait.webp";
         grid-area: content;
     }
 
-    .contact strong {
-        display: block;
-        margin-bottom: 0.25rem;
+    .actions {
+        margin: 1.75rem 0 0;
     }
 
-    .cta {
-        display: inline-block;
-        margin-top: 0.5rem;
-        font-weight: 600;
+    .button {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 0 1.125rem;
+        border-radius: 0.5rem;
+        background: var(--color-link);
+        color: var(--color-bg);
+        font-weight: 500;
         text-decoration: none;
-        border-bottom: 1px solid currentColor;
+    }
+
+    .button:hover {
+        /* Darken via the text color rather than a second brand token —
+           keeps the palette to one accent. */
+        background: var(--color-text);
+    }
+
+    /* --- Recent writing / Selected work --- */
+
+    .panel {
+        margin-top: 3.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .panel-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.5rem 1.5rem;
+    }
+
+    .panel-head h2 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+    }
+
+    .panel-more {
+        font-size: 0.9rem;
+        text-decoration: none;
+    }
+
+    .panel-more:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .teaser-list {
+        list-style: none;
+        padding: 0;
+        margin: 1.25rem 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    /* Title and date share a baseline row; the description tucks beneath in
+       the title's column. Same shape as the /projects rows so the two pages
+       feel like one system. */
+    .teaser {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 1.5rem;
+        align-items: baseline;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .teaser-title {
+        color: var(--color-link);
+        font-weight: 500;
+    }
+
+    .teaser:hover .teaser-title {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .teaser-meta {
+        color: var(--color-text-muted);
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    .teaser-description {
+        margin: 0.25rem 0 0;
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        max-width: var(--prose-width);
+    }
+
+    .external-icon {
+        font-weight: 400;
+        font-size: 0.85em;
+        opacity: 0.7;
+    }
+
+    /* --- Contact --- */
+
+    .contact {
+        margin-top: 3.5rem;
+        padding: 1.5rem;
+        background: var(--color-surface);
+        border-radius: 0.75rem;
+        max-width: var(--prose-width);
+    }
+
+    .contact h2 {
+        margin: 0 0 0.5rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .contact p {
+        margin: 0;
     }
 </style>

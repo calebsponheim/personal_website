@@ -2,7 +2,8 @@
 title: "Corporate Training"
 description: "At NN/G, I teach live and on-demand courses for tech workers, covering AI, UX research, and decision-making"
 order: 20
-dateLabel: "2023-Present"
+dateLabel: "2023–present"
+startYear: 2023
 draft: false
 ---
 

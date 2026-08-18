@@ -41,7 +41,7 @@ const socialLinks = [
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem 1.5rem;
-        align-items: baseline;
+        align-items: center;
         justify-content: space-between;
     }
 
@@ -55,7 +55,16 @@ const socialLinks = [
         list-style: none;
         display: flex;
         flex-wrap: wrap;
+        align-items: center;
         gap: 0.25rem 1rem;
+    }
+
+    /* Footer links were only 17px tall — under the 24x24 minimum in WCAG
+       2.5.8. Pad them to 44px without shifting the baseline layout. */
+    .social a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
     }
 
     /* Middot separator between links. The `/ ""` half of the `content` value
@@ -63,6 +72,6 @@ const socialLinks = [
     .social li + li::before {
         content: "·" / "";
         margin-right: 1rem;
-        color: var(--color-border);
+        color: var(--color-text-muted);
     }
 </style>

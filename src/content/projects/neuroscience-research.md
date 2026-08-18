@@ -2,7 +2,9 @@
 title: "Neuroscience Research"
 description: "Brain–machine interfaces, motor control, fMRI."
 order: 70
-dateLabel: "2013-2023"
+dateLabel: "2013–2023"
+startYear: 2013
+endYear: 2023
 draft: false
 ---
 

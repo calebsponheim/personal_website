@@ -42,13 +42,19 @@ function readingTimeMinutes(body) {
                     const minutes = readingTimeMinutes(post.body ?? "");
                     return (
                         <li class="post-item">
-                            <a href={`/blog/${post.id}/`} class="post-link">
+                            <a
+                                href={`/blog/${post.id}/`}
+                                class:list={[
+                                    "post-link",
+                                    { "has-cover": !!post.data.heroImage },
+                                ]}
+                            >
                                 {post.data.heroImage && (
                                     <Image
                                         src={post.data.heroImage}
                                         alt={post.data.heroImageAlt ?? ""}
-                                        widths={[400, 800, 1200]}
-                                        sizes="(min-width: 720px) 720px, 100vw"
+                                        widths={[200, 400, 600]}
+                                        sizes="(min-width: 560px) 192px, calc(100vw - 3rem)"
                                         class="post-cover"
                                     />
                                 )}
@@ -62,7 +68,9 @@ function readingTimeMinutes(body) {
                                                 post.data.pubDate,
                                             )}
                                         </time>
-                                        <span class="dot">·</span>
+                                        <span class="dot" aria-hidden="true">
+                                            ·
+                                        </span>
                                         <span>{minutes} min read</span>
                                     </p>
                                     {post.data.description && (
@@ -92,7 +100,7 @@ function readingTimeMinutes(body) {
 
     <p class="rss-link">
         <a href="/rss.xml">Subscribe via RSS →</a>
-        <span class="dot">·</span>
+        <span class="dot" aria-hidden="true">·</span>
         <a href="/tags">Browse by tag</a>
     </p>
 </Layout>
@@ -104,14 +112,24 @@ function readingTimeMinutes(body) {
         margin: 2rem 0 0;
         display: flex;
         flex-direction: column;
-        gap: 3rem;
+        gap: 2.5rem;
     }
 
     .post-link {
         display: grid;
-        gap: 1rem;
+        gap: 0.75rem 1.25rem;
         color: inherit;
         text-decoration: none;
+    }
+
+    /* Covers used to run the full 784px column at 16:9 — 441px tall, which
+       pushed every post title below the fold and inverted the hierarchy of a
+       page whose job is scanning titles. They're thumbnails now. */
+    @media (min-width: 560px) {
+        .post-link.has-cover {
+            grid-template-columns: 12rem minmax(0, 1fr);
+            align-items: start;
+        }
     }
 
     .post-cover {
@@ -120,10 +138,15 @@ function readingTimeMinutes(body) {
         aspect-ratio: 16 / 9;
         object-fit: cover;
         border-radius: 0.5rem;
+        /* Several covers are black-line art on white. Without a border they
+           dissolve into the page background and read as empty space. */
+        border: 1px solid var(--color-border);
     }
 
     .post-item h2 {
         margin: 0 0 0.25rem;
+        font-size: 1.35rem;
+        line-height: 1.3;
         color: var(--color-link);
     }
 
@@ -149,6 +172,7 @@ function readingTimeMinutes(body) {
     .post-description {
         margin: 0;
         color: var(--color-text);
+        max-width: var(--prose-width);
     }
 
     .post-tags {
@@ -163,7 +187,7 @@ function readingTimeMinutes(body) {
     .post-tags a {
         display: inline-block;
         padding: 0.25rem 0.625rem;
-        background: #f5f5f5;
+        background: var(--color-surface);
         border-radius: 999px;
         color: var(--color-text-muted);
         text-decoration: none;
@@ -171,7 +195,7 @@ function readingTimeMinutes(body) {
     }
 
     .post-tags a:hover {
-        background: #ebebeb;
+        background: var(--color-surface-hover);
         color: var(--color-text);
     }
 
