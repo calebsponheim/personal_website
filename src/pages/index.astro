@@ -11,43 +11,16 @@ import * as homepageCopy from "../copy/home.md";
 const RESUME_URL = "/resume/caleb-sponheim-resume.pdf";
 const EMAIL = "caleb.sponheim@gmail.com";
 
-const {
-    availability,
-    featuredSlug,
-    featuredEyebrow,
-    featuredBlurb,
-} = homepageCopy.frontmatter;
+const { availability, featuredSlug, featuredEyebrow, featuredBlurb } =
+    homepageCopy.frontmatter;
 
-// Same draft filter as every other view of these collections — drafts show
-// in dev, are hidden at build.
-const recentPosts = (
-    await getCollection("blog", ({ data }) => {
-        return import.meta.env.DEV || !data.draft;
-    })
-)
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-    .slice(0, 3);
-
-// Projects keep their curated `order` here — the home page shows the top of
-// that list, which is the point of hand-setting it.
-const allProjects = (
-    await getCollection("projects", ({ data }) => {
-        return import.meta.env.DEV || !data.draft;
-    })
-).sort((a, b) => a.data.order - b.data.order);
-
-// The featured project gets its own pitch above the list, so drop it from the
-// list to avoid showing the same entry twice.
-const featured = allProjects.find((entry) => entry.id === featuredSlug) ?? null;
-const listedProjects = allProjects
-    .filter((entry) => entry.id !== featured?.id)
-    .slice(0, 4);
-
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
+// Only the featured project is pulled in — the home page deliberately stays
+// short, so /projects and /blog own the full lists. Same draft filter as
+// every other view of this collection.
+const projects = await getCollection("projects", ({ data }) => {
+    return import.meta.env.DEV || !data.draft;
 });
+const featured = projects.find((entry) => entry.id === featuredSlug) ?? null;
 ---
 
 <Layout
@@ -71,9 +44,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
             </div>
 
             <p class="actions">
-                <a class="button" href={RESUME_URL} download>
-                    Download résumé <span class="button-hint">(PDF)</span>
-                </a>
+                <a class="button" href={RESUME_URL}>See Caleb's resume →</a>
             </p>
         </div>
     </div>
@@ -90,105 +61,6 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
                     </a>
                 </p>
             </aside>
-        )
-    }
-
-    {
-        recentPosts.length > 0 && (
-            <section class="panel" aria-labelledby="recent-writing">
-                <div class="panel-head">
-                    <h2 id="recent-writing">Recent writing</h2>
-                    <a class="panel-more" href="/blog">
-                        All posts <span aria-hidden="true">→</span>
-                    </a>
-                </div>
-                <ul class="teaser-list">
-                    {recentPosts.map((post) => (
-                        <li>
-                            <a class="teaser" href={`/blog/${post.id}/`}>
-                                <span class="teaser-title">
-                                    {post.data.title}
-                                </span>
-                                <time
-                                    class="teaser-meta"
-                                    datetime={post.data.pubDate.toISOString()}
-                                >
-                                    {dateFormatter.format(post.data.pubDate)}
-                                </time>
-                            </a>
-                            {post.data.description && (
-                                <p class="teaser-description">
-                                    {post.data.description}
-                                </p>
-                            )}
-                        </li>
-                    ))}
-                </ul>
-            </section>
-        )
-    }
-
-    {
-        listedProjects.length > 0 && (
-            <section class="panel" aria-labelledby="selected-work">
-                <div class="panel-head">
-                    <h2 id="selected-work">Selected work</h2>
-                    <a class="panel-more" href="/projects">
-                        All projects <span aria-hidden="true">→</span>
-                    </a>
-                </div>
-                <ul class="teaser-list">
-                    {listedProjects.map((project) => {
-                        const isExternal = Boolean(project.data.externalUrl);
-                        return (
-                            <li>
-                                <a
-                                    class="teaser"
-                                    href={
-                                        isExternal
-                                            ? project.data.externalUrl
-                                            : `/projects/${project.id}/`
-                                    }
-                                    {...(isExternal
-                                        ? {
-                                              target: "_blank",
-                                              rel: "noopener noreferrer",
-                                          }
-                                        : {})}
-                                >
-                                    <span class="teaser-title">
-                                        {project.data.title}
-                                        {isExternal && (
-                                            <>
-                                                <span
-                                                    class="external-icon"
-                                                    aria-hidden="true"
-                                                >
-                                                    {" ↗"}
-                                                </span>
-                                                <span class="visually-hidden">
-                                                    {" "}
-                                                    (opens in a new tab)
-                                                </span>
-                                            </>
-                                        )}
-                                    </span>
-                                    {project.data.dateLabel && (
-                                        <span class="teaser-meta">
-                                            {project.data.dateLabel}
-                                        </span>
-                                    )}
-                                </a>
-                                {project.data.description && (
-                                    <p class="teaser-description">
-                                        {project.data.description}
-                                    </p>
-                                )}
-                            </li>
-                        );
-                    })}
-                </ul>
-            </section>
         )
     }
 
@@ -311,7 +183,6 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     .button {
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
         min-height: 44px;
         padding: 0 1.125rem;
         border-radius: 0.5rem;
@@ -327,16 +198,10 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
         background: var(--color-text);
     }
 
-    .button-hint {
-        font-weight: 400;
-        opacity: 0.8;
-        font-size: 0.9em;
-    }
-
     /* --- Featured project --- */
 
     .featured {
-        margin-top: 3.5rem;
+        margin-top: 3rem;
         padding: 1.25rem 1.5rem;
         border: 1px solid var(--color-border);
         /* Accent rule on the leading edge marks this as the one promoted
@@ -370,94 +235,10 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
         margin: 0;
     }
 
-    /* --- Recent writing / Selected work --- */
-
-    .panel {
-        margin-top: 3.5rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid var(--color-border);
-    }
-
-    .panel-head {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 0.5rem 1.5rem;
-    }
-
-    .panel-head h2 {
-        margin: 0;
-        font-size: 1.05rem;
-        font-weight: 600;
-        letter-spacing: 0.01em;
-    }
-
-    .panel-more {
-        font-size: 0.9rem;
-        text-decoration: none;
-    }
-
-    .panel-more:hover {
-        text-decoration: underline;
-        text-underline-offset: 4px;
-    }
-
-    .teaser-list {
-        list-style: none;
-        padding: 0;
-        margin: 1.25rem 0 0;
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem;
-    }
-
-    /* Title and date share a baseline row; the description tucks beneath in
-       the title's column. Same shape as the /projects rows so the two pages
-       feel like one system. */
-    .teaser {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        column-gap: 1.5rem;
-        align-items: baseline;
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .teaser-title {
-        color: var(--color-link);
-        font-weight: 500;
-    }
-
-    .teaser:hover .teaser-title {
-        text-decoration: underline;
-        text-underline-offset: 4px;
-    }
-
-    .teaser-meta {
-        color: var(--color-text-muted);
-        font-size: 0.85rem;
-        white-space: nowrap;
-    }
-
-    .teaser-description {
-        margin: 0.25rem 0 0;
-        color: var(--color-text-muted);
-        font-size: 0.9rem;
-        line-height: 1.5;
-        max-width: var(--prose-width);
-    }
-
-    .external-icon {
-        font-weight: 400;
-        font-size: 0.85em;
-        opacity: 0.7;
-    }
-
     /* --- Contact --- */
 
     .contact {
-        margin-top: 3.5rem;
+        margin-top: 2.5rem;
         padding: 1.5rem;
         background: var(--color-surface);
         border-radius: 0.75rem;

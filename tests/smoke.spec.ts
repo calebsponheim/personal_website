@@ -50,7 +50,7 @@ test('the home page exposes canonical and social metadata', async ({ page }) => 
   );
 });
 
-test('the home page offers a local resume download and a direct mailto', async ({
+test('the home page links a locally hosted resume and a direct mailto', async ({
   page,
 }) => {
   await page.goto('/');
@@ -59,9 +59,9 @@ test('the home page offers a local resume download and a direct mailto', async (
     'href',
     'mailto:caleb.sponheim@gmail.com',
   );
-
-  const resume = page.locator('a[href="/resume/caleb-sponheim-resume.pdf"]');
-  await expect(resume).toHaveAttribute('download', '');
+  await expect(
+    page.locator('a[href="/resume/caleb-sponheim-resume.pdf"]'),
+  ).toHaveCount(1);
 
   // The PDF is served from this site, not Google Docs — no login wall.
   const response = await page.request.get('/resume/caleb-sponheim-resume.pdf');
@@ -69,9 +69,7 @@ test('the home page offers a local resume download and a direct mailto', async (
   expect(response.headers()['content-type']).toContain('pdf');
 });
 
-test('the home page features one project without duplicating it in the list', async ({
-  page,
-}) => {
+test('the home page features one project and stays short', async ({ page }) => {
   await page.goto('/');
 
   const featured = page.locator('.featured');
@@ -80,13 +78,10 @@ test('the home page features one project without duplicating it in the list', as
     featured.getByRole('link', { name: /Read the case study/ }),
   ).toHaveAttribute('href', '/projects/lemon/');
 
-  // Lemon is promoted above, so it must not also appear under Selected work.
-  const selectedWork = page.locator('section.panel', {
-    has: page.getByRole('heading', { name: 'Selected work' }),
-  });
-  await expect(
-    selectedWork.locator('a[href="/projects/lemon/"]'),
-  ).toHaveCount(0);
+  // The landing page deliberately carries no post or project lists — /blog
+  // and /projects own those. Only the nav links should point at them.
+  await expect(page.locator('main a[href^="/blog"]')).toHaveCount(0);
+  await expect(page.locator('main a[href^="/projects/"]')).toHaveCount(1);
 });
 
 test('unknown routes use the custom not-found page', async ({ page }) => {
