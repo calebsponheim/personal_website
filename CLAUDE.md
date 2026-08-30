@@ -15,6 +15,14 @@ npm run pw:codegen   # Record interactions against the dev server
 
 Playwright's `webServer` block boots `npm run dev` for you and reuses an already-running dev server when one exists — no need to start it by hand before running tests locally.
 
+## Deployment
+
+**Pushing to `main` publishes the site.** Cloudflare Workers Builds is connected to the GitHub repo with `main` as the production branch, so every push to `main` runs `npm run build` and then `npx wrangler deploy` on Cloudflare's builders. There is no separate publish step to remember — and no way to push to `main` without going live. Non-production branches are built too, but they run `npx wrangler versions upload`, which stages a preview version instead of deploying to production.
+
+`npm run deploy` (`astro build && wrangler deploy`) is the manual escape hatch for publishing from a laptop. It is **redundant after a push to `main`**: running both produces two deployments seconds apart — one built on Cloudflare's Linux builders, one built locally — which race, and whose image hashes can differ. Prefer letting the push deploy. Reach for the script only when Cloudflare's build is unavailable.
+
+**CI does not gate the deploy.** [ci.yml](.github/workflows/ci.yml) builds the site and runs the Playwright suite on every push to `main`, but Cloudflare's build fires on that same push and does not wait for it. A red CI run still ships. Verify anything risky *before* pushing — `npm run build && npm run test:e2e` — because by the time GitHub reports a failure the site is already serving the change.
+
 ## Architecture at a glance
 
 ```
