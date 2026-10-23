@@ -30,7 +30,7 @@ test('the home page exposes canonical and social metadata', async ({ page }) => 
   );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
-    /leads applied AI and UX work/i,
+    /works in applied AI and UX/i,
   );
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     'content',
