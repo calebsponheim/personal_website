@@ -1,4 +1,5 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 // The `blog` collection: Markdown (or MDX, if added later) files under
@@ -33,7 +34,7 @@ const blog = defineCollection({
             // Optional canonical URL — set this if a post was originally
             // published elsewhere (e.g. Substack) so search engines know
             // which copy is canonical.
-            canonicalUrl: z.string().url().optional(),
+            canonicalUrl: z.url().optional(),
         }),
 });
 
@@ -70,7 +71,7 @@ const projects = defineCollection({
             // If set, the index card becomes an outbound link (no sub-page
             // is rendered). Use this for projects that live on another
             // site, e.g. an NN/G author page.
-            externalUrl: z.string().url().optional(),
+            externalUrl: z.url().optional(),
             // Drafts are visible in dev, hidden in prod builds — same
             // convention as the `blog` collection.
             draft: z.boolean().optional().default(false),

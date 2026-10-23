@@ -6,22 +6,28 @@ Personal website + blog for Caleb Sponheim. Astro 7, statically built, deployed 
 
 ```bash
 npm run dev          # Dev server on http://localhost:4321
+npm run check        # Astro / TypeScript diagnostics
 npm run build        # Static build to ./dist/
 npm run preview      # Serve ./dist/ locally
-npm run test:e2e     # Playwright across Chromium, Firefox, WebKit
+npm run test:e2e     # Built site under local Cloudflare runtime; build first
+npm run test:e2e:dev # Optional tests against Astro dev
 npm run test:e2e:ui  # Playwright UI mode
 npm run pw:codegen   # Record interactions against the dev server
 ```
 
-Playwright's `webServer` block boots `npm run dev` for you and reuses an already-running dev server when one exists — no need to start it by hand before running tests locally.
+Use Node **22.23.4** from `.node-version` and npm **10.9.9**. GitHub Actions and Cloudflare Builds read the shared Node version file. Use `npm ci` for reproducible installs.
+
+Playwright starts `npm run preview:worker` (Wrangler's local runtime) by default, serving the built `dist/` with Cloudflare asset headers and redirects. Run `npm run build` first. Production tests do not reuse an existing server. `npm run test:e2e:dev` explicitly opts into Astro dev for interactive work.
 
 ## Deployment
 
-**Pushing to `main` publishes the site.** Cloudflare Workers Builds is connected to the GitHub repo with `main` as the production branch, so every push to `main` runs `npm run build` and then `npx wrangler deploy` on Cloudflare's builders. There is no separate publish step to remember — and no way to push to `main` without going live. Non-production branches are built too, but they run `npx wrangler versions upload`, which stages a preview version instead of deploying to production.
+**Merge a checked pull request to publish.** `main` requires a pull request, up-to-date `build-and-test` and `Workers Builds: calebsponheim-website` checks, and resolved conversations. These rules apply to administrators too; do not bypass them or push directly to `main`.
 
-`npm run deploy` (`astro build && wrangler deploy`) is the manual escape hatch for publishing from a laptop. It is **redundant after a push to `main`**: running both produces two deployments seconds apart — one built on Cloudflare's Linux builders, one built locally — which race, and whose image hashes can differ. Prefer letting the push deploy. Reach for the script only when Cloudflare's build is unavailable.
+Cloudflare Workers Builds automatically deploys `main` using `npm run build` then `npx wrangler deploy`. Other branches run `npx wrangler versions upload`, staging a preview without changing production. CI validates clean installation, `npm audit`, `npm run check`, the build, and browser tests of the built site. Cloudflare's main build still runs independently of main's CI; the required PR checks are the gate before merge. Verify the Cloudflare deployment and live site after merging.
 
-**CI does not gate the deploy.** [ci.yml](.github/workflows/ci.yml) builds the site and runs the Playwright suite on every push to `main`, but Cloudflare's build fires on that same push and does not wait for it. A red CI run still ships. Verify anything risky *before* pushing — `npm run build && npm run test:e2e` — because by the time GitHub reports a failure the site is already serving the change.
+`npm run deploy` is a manual fallback only when Cloudflare Builds is unavailable. Do not run it after a normal merge: that causes redundant deployments.
+
+Dependabot opens grouped weekly npm and GitHub Actions PRs, with security updates enabled. Repository secret scanning and push protection are enabled. Cloudflare Web Analytics remains automatically injected; `public/_headers` narrowly allows its documented script and reporting hosts. `vite.build.assetsInlineLimit: 0` keeps application scripts external so they work with `script-src` without inline exceptions.
 
 ## Architecture at a glance
 
@@ -52,7 +58,7 @@ tests/smoke.spec.ts        Playwright smoke test
 
 **Projects sort by `order`, not date.** Unlike blog posts (sorted reverse-chronologically by `pubDate`), projects use a hand-set integer `order` field so the page tells a curated story. Spaced increments (10, 20, 30…) make reordering cheap without renumbering everything.
 
-**The `/projects` sort control.** `order` is the *default* ("Relevance"); readers can also sort by date in either direction. Because `dateLabel` is free text (`"Ongoing"`, `"2026–present"`) and can't be sorted, sorting reads separate numeric `startYear` / `endYear` frontmatter, emitted onto each `<li>` as data attributes. A missing `endYear` means "still running" and is substituted with an `ONGOING = 9999` sentinel so newest-first ranks live work above anything finished. **Add both fields whenever you add a project**, or it sorts as if it never ended. The control is progressively enhanced: it ships with `hidden`, the inline script reveals it, and it reorders real DOM nodes (never CSS `order`) so tab order keeps matching visual order. It also reads and writes `?sort=`.
+**The `/projects` sort control.** `order` is the *default* ("Relevance"); readers can also sort by date in either direction. Because `dateLabel` is free text (`"Ongoing"`, `"2026–present"`) and can't be sorted, sorting reads separate numeric `startYear` / `endYear` frontmatter, emitted onto each `<li>` as data attributes. A missing `endYear` means "still running" and is substituted with an `ONGOING = 9999` sentinel so newest-first ranks live work above anything finished. **Add both fields whenever you add a project**, or it sorts as if it never ended. The control is progressively enhanced: it ships with `hidden`, the bundled script reveals it, and it reorders real DOM nodes (never CSS `order`) so tab order keeps matching visual order. It also reads and writes `?sort=`.
 
 **Copy in Markdown.** Home page prose lives in [src/copy/home.md](src/copy/home.md), imported as a module (`import * as homepageCopy from "../copy/home.md"`) rather than loaded as a content collection — `homepageCopy.Content` renders the body, `homepageCopy.frontmatter` carries the rest. `src/copy/` sits outside `src/pages/`, so it never becomes a route. Its frontmatter also drives the home page's `availability` line and the featured-project callout: `featuredSlug` must match a `src/content/projects/` filename, and the callout's title and URL come from that entry so they can't drift from the copy.
 
@@ -122,4 +128,4 @@ Two webfonts loaded via Astro's font providers ([astro.config.mjs](astro.config.
 
 - `Astro.site` is only set in builds where `site:` is configured (it is — `calebsponheim.com`). `Layout.astro` falls back gracefully but anything that builds absolute URLs needs to handle the dev case.
 - `dist/` and `.astro/` are build artifacts. Don't edit them; don't read them as source of truth.
-- The default Astro starter `README.md` is still in the repo. It's stale — trust this file instead.
+- `README.md` covers local setup and maintenance; keep its runtime and publishing instructions aligned with this guide.
