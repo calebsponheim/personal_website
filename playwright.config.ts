@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 4321;
+const dev = process.env.SITE_TEST_MODE === 'dev';
 const baseURL = `http://localhost:${PORT}`;
 
 export default defineConfig({
@@ -23,9 +24,9 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'npm run dev',
+    command: dev ? 'npm run dev' : 'npm run preview:worker',
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: dev && !process.env.CI,
     timeout: 120_000,
     // Astro 7 auto-detects AI coding agent environments and starts `astro
     // dev` as a detached background process (see the Astro v7 upgrade

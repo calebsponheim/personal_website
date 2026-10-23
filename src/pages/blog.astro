@@ -21,7 +21,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 
 // ~225 words per minute is the conventional average reading speed used
 // by Medium, Substack, etc.
-function readingTimeMinutes(body) {
+function readingTimeMinutes(body: string) {
     const words = body.split(/\s+/).filter(Boolean).length;
     return Math.max(1, Math.round(words / 225));
 }

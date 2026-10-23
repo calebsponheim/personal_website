@@ -9,24 +9,18 @@ Scaffolding already in place: `wrangler.jsonc` (static-assets Worker with a
 minimal `src/worker.js` entrypoint for the canonical-host redirect), `wrangler`
 as a devDependency, and a `npm run deploy` script (`astro build && wrangler deploy`).
 
-## Current state (verified 2026-08-13)
+## Current state (verified 2026-10-23)
 
-- `calebsponheim.com` is an active full Cloudflare zone.
-- The registrar is Cloudflare, Inc.; the domain transfer is complete.
-- `calebsponheim.com` and `www.calebsponheim.com` are custom domains on the
-  `calebsponheim-website` Worker.
-- The apex site returns `200`, and `www` redirects to the apex over HTTPS.
-- Legacy Squarespace paths in `public/_redirects` are returning the expected
-  `301` redirects in production.
-- GitHub Actions runs the build and browser smoke tests. Cloudflare Workers
-  Builds is connected for deployments. Its generated API token was rotated on
-  2026-08-13 after the original credential was revoked and stopped builds.
-- Only `main` deploys to production. Non-production branches run
-  `npx wrangler versions upload`, which creates a previewable Worker version
-  without promoting it to production.
-- The public GitHub repository protects `main`: pull requests, up-to-date
-  GitHub and Cloudflare checks, and resolved conversations are required;
-  force-pushes and branch deletion are disabled.
+- `calebsponheim.com` and `www.calebsponheim.com` are custom domains on `calebsponheim-website`; www redirects to the apex. Cloudflare is the registrar and DNS provider.
+- Node 22.23.4 is selected by `.node-version` in both GitHub Actions and Cloudflare Builds. Use npm 10.9.9 and `npm ci` locally.
+- GitHub requires up-to-date `build-and-test` and `Workers Builds: calebsponheim-website` checks, a PR, and resolved conversations before merging to `main`. Administrators must follow these rules too. Force pushes and branch deletion remain disabled.
+- PR CI runs the dependency audit, type checker, build, and Chromium/Firefox/WebKit tests against built assets served by `wrangler dev --local`, including headers, 404s, legacy redirects, and sorting under the CSP.
+- Cloudflare uploads preview versions for non-production branches. Merging to `main` triggers the automatic production deploy; do not also deploy from a laptop.
+- Confirm the production build succeeds and check the live site after merging. CI and the production Cloudflare build run independently after a merge.
+- Cloudflare Web Analytics is automatically injected. The CSP permits `https://static.cloudflareinsights.com` for scripts and `https://cloudflareinsights.com` for connections, alongside same-origin resources. Application scripts are external rather than inline.
+- Dependabot security fixes, secret scanning, and push protection are enabled; weekly grouped update PRs are configured in `.github/dependabot.yml`.
+
+The setup and migration sections below are historical recovery references, not the routine publishing workflow. See the README for normal development and publishing.
 
 ## 1. First-time deploy
 

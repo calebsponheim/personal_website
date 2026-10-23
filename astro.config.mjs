@@ -10,6 +10,8 @@ export default defineConfig({
     // Canonical public origin for RSS, canonical links, sitemap entries, and
     // Open Graph image URLs. www is redirected to this apex host in src/worker.js.
     site: 'https://calebsponheim.com',
+    // Keep scripts external so the strict CSP can execute them without inline exceptions.
+    vite: { build: { assetsInlineLimit: 0 } },
     integrations: [mdx(), sitemap()],
     markdown: {
         // Shiki theme for fenced code blocks. `github-light` is a clean,

@@ -13,8 +13,11 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "pw:codegen": "playwright codegen http://localhost:4321",
-    "deploy": "astro build && wrangler deploy",
-    "cf:login": "wrangler login"
+    "deploy": "npm run check && npm run build && wrangler deploy",
+    "cf:login": "wrangler login",
+    "check": "astro check",
+    "preview:worker": "wrangler dev --local --ip 127.0.0.1 --port 4321",
+    "test:e2e:dev": "SITE_TEST_MODE=dev playwright test"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.4",
@@ -28,7 +31,10 @@
     "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.12",
     "@playwright/test": "^1.62.1",
+    "typescript": "^6.0.3",
     "wrangler": "^4.152.0"
-  }
+  },
+  "packageManager": "npm@10.9.9"
 }
