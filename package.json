@@ -34,7 +34,7 @@
     "@astrojs/check": "^0.9.12",
     "@playwright/test": "^1.62.1",
     "typescript": "^6.0.3",
-    "wrangler": "^4.152.0"
+    "wrangler": "^4.156.0"
   },
   "packageManager": "npm@10.9.9"
 }
