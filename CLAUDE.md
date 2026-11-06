@@ -54,17 +54,17 @@ tests/smoke.spec.ts        Playwright smoke test
 
 ## Non-obvious conventions
 
-**Draft filter.** `import.meta.env.DEV || !data.draft` — drafts are visible in dev, hidden at build. The pattern is duplicated across every place that queries `getCollection`: [index.astro](src/pages/index.astro), [blog.astro](src/pages/blog.astro), [blog/[...slug].astro](src/pages/blog/[...slug].astro), [og/[...slug].ts](src/pages/og/[...slug].ts), [rss.xml.js](src/pages/rss.xml.js), [projects.astro](src/pages/projects.astro), and [projects/[...slug].astro](src/pages/projects/[...slug].astro). If you add a new view of either collection, keep this filter consistent.
+**Draft filter.** `import.meta.env.DEV || !data.draft` — drafts are visible in dev, hidden at build. The pattern is duplicated across every place that queries `getCollection`: [blog.astro](src/pages/blog.astro), [blog/[...slug].astro](src/pages/blog/[...slug].astro), [og/[...slug].ts](src/pages/og/[...slug].ts), [rss.xml.js](src/pages/rss.xml.js), [projects.astro](src/pages/projects.astro), and [projects/[...slug].astro](src/pages/projects/[...slug].astro). If you add a new view of either collection, keep this filter consistent.
 
 **Projects sort by `order`, not date.** Unlike blog posts (sorted reverse-chronologically by `pubDate`), projects use a hand-set integer `order` field so the page tells a curated story. Spaced increments (10, 20, 30…) make reordering cheap without renumbering everything.
 
 **The `/projects` sort control.** `order` is the *default* ("Relevance"); readers can also sort by date in either direction. Because `dateLabel` is free text (`"Ongoing"`, `"2026–present"`) and can't be sorted, sorting reads separate numeric `startYear` / `endYear` frontmatter, emitted onto each `<li>` as data attributes. A missing `endYear` means "still running" and is substituted with an `ONGOING = 9999` sentinel so newest-first ranks live work above anything finished. **Add both fields whenever you add a project**, or it sorts as if it never ended. The control is progressively enhanced: it ships with `hidden`, the bundled script reveals it, and it reorders real DOM nodes (never CSS `order`) so tab order keeps matching visual order. It also reads and writes `?sort=`.
 
-**Copy in Markdown.** Home page prose lives in [src/copy/home.md](src/copy/home.md), imported as a module (`import * as homepageCopy from "../copy/home.md"`) rather than loaded as a content collection — `homepageCopy.Content` renders the body, `homepageCopy.frontmatter` carries the rest. `src/copy/` sits outside `src/pages/`, so it never becomes a route. Its frontmatter also drives the home page's `availability` line and the featured-project callout: `featuredSlug` must match a `src/content/projects/` filename, and the callout's title and URL come from that entry so they can't drift from the copy.
+**Copy in Markdown.** Home page prose lives in [src/copy/home.md](src/copy/home.md), imported as a module (`import * as homepageCopy from "../copy/home.md"`) rather than loaded as a content collection — `homepageCopy.Content` renders the body, `homepageCopy.frontmatter` carries the rest. `src/copy/` sits outside `src/pages/`, so it never becomes a route. The frontmatter supplies the availability line.
 
 **Résumé is a local PDF.** [public/resume/caleb-sponheim-resume.pdf](public/resume/caleb-sponheim-resume.pdf), linked from the home page and `/projects`. It deliberately replaced a Google Docs share link, which put a login wall and an access-request risk in front of the site's main conversion action. Re-export to this path to update it — don't reintroduce an external link. The links open the PDF rather than carrying a `download` attribute, matching their "See … resume" wording.
 
-**The home page stays short.** It is intentionally hero + positioning statement + one featured project + contact, with no post or project lists — `/blog` and `/projects` own those. A test asserts the absence of those lists, so adding one back means updating it deliberately.
+**The home page stays short.** It is intentionally hero + positioning statement + contact, with no post or project lists — `/blog` and `/projects` own those. A test asserts the absence of those lists, so adding one back means updating it deliberately.
 
 **External project entries.** A project with `externalUrl` set is a link-out card on `/projects` with no sub-page — [projects/[...slug].astro](src/pages/projects/[...slug].astro) filters these out of `getStaticPaths`. Use this for work that lives on another site (e.g. an NN/G author page).
 
@@ -90,7 +90,7 @@ Schema lives in [src/content.config.ts](src/content.config.ts) and is the source
 
 ## Theming and layout tokens
 
-Every color is a CSS custom property on `:root` in [global.css](src/styles/global.css), and dark mode is a single `@media (prefers-color-scheme: dark)` block that redefines only those tokens — no component carries a dark-specific rule. **Don't hardcode a hex value in a component**; if you need a new shade, add a token. `--color-surface` / `--color-surface-hover` are the raised surfaces (tag pills, code blocks, the contact and featured cards).
+Every color is a CSS custom property on `:root` in [global.css](src/styles/global.css), and dark mode is a single `@media (prefers-color-scheme: dark)` block that redefines only those tokens — no component carries a dark-specific rule. **Don't hardcode a hex value in a component**; if you need a new shade, add a token. `--color-surface` / `--color-surface-hover` are the raised surfaces (tag pills, code blocks, callouts).
 
 `--color-text-muted` is darker than a typical muted grey on purpose: it has to clear 4.5:1 against `--color-surface`, not just against white, because muted text sits on grey pills. It currently measures 6.13:1 on the page background and 5.58:1 on a surface.
 
@@ -111,12 +111,7 @@ Things already in place that are easy to regress:
 
 ## Typography
 
-Two webfonts loaded via Astro's font providers ([astro.config.mjs](astro.config.mjs)) and exposed as CSS variables:
-
-- `--font-inter` — UI, headings, captions.
-- `--font-newsreader` — long-form blog body (soft transitional serif).
-
-`Layout.astro` preloads both. Switching to a new font means touching `astro.config.mjs` and `global.css` together.
+Inter is the shared family for headings, long-form prose, and UI. Astro configures it in [astro.config.mjs](astro.config.mjs), [Layout.astro](src/layouts/Layout.astro) preloads it, and [global.css](src/styles/global.css) applies it site-wide. The Open Graph renderer uses a local Inter font. Keep headings free of eyebrows and use sentence case for UI labels.
 
 ## Code style
 

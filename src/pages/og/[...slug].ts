@@ -23,14 +23,13 @@ const { getStaticPaths, GET } = await OGImageRoute({
     getImageOptions: (_path, page) =>
         ogImageOptions(
             page.title,
-            `CALEB SPONHEIM  /  ${page.pubDate
+            `Caleb Sponheim · ${page.pubDate
                 .toLocaleDateString("en-US", {
                     day: "2-digit",
                     month: "short",
                     timeZone: "UTC",
                     year: "numeric",
-                })
-                .toUpperCase()}`,
+                })}`,
         ),
 });
 

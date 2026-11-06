@@ -14,9 +14,9 @@ My publications can be found on my Google Scholar profile:
 https://scholar.google.com/citations?user=4ITS-ScAAAAJ&
 
 ## Brain-Machine Interfaces
-I joined a collaboration between the University of Chicago and the University of Pittsburgh to build state-of-the-art brain-machine interfaces, to enable human patients to interact with the world in ways they had previously lost, via spinal cord injury. I was, at best, a tertiary contributor to the project, but I helped built the rigs, write code, bug-fix the virtual reality headsets, and work closely with our first human participant, Scott.
+I joined a collaboration between the University of Chicago and the University of Pittsburgh to build state-of-the-art brain-machine interfaces, to enable human patients to interact with the world in ways they had previously lost, via spinal cord injury. As one contributor to a larger collaboration, I helped build the rigs, write code, troubleshoot the virtual reality headsets, and work with our first human participant, Scott.
 
-This was the closest I got to my dream of why I went to grad school: to contribute to brain-machine interfaces. and yet, the work was exceedingly diffult, slow, incremental, and political. Eventually, I had to deprioritize my involvement to finish my dissertation, which I barely managed to finish anyway. So it goes.
+Brain-machine interfaces were a big part of why I went to graduate school. This was the closest I got to that work, and it was slow, difficult, and dependent on a lot of people working together. Eventually, I had to step back from the project to finish my dissertation.
 
 
 ## NIMH Macaque Template

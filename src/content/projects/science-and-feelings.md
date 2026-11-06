@@ -1,6 +1,6 @@
 ---
 title: "Science and Feelings"
-description: "I ran a podcast for 6 months where I interviewed my scientist friends about their identities"
+description: "Eight conversations with scientist friends about identity, uncertainty, and life in research."
 order: 60
 dateLabel: "2018"
 startYear: 2018
