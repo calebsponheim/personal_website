@@ -2,7 +2,6 @@ import type { OGImageOptions } from "astro-og-canvas";
 
 const OG_BACKGROUND = "./src/assets/og-ascii-field.png";
 const OG_FONTS = [
-    "./src/assets/fonts/newsreader-variable.woff2",
     "./src/assets/fonts/inter-variable.woff2",
 ];
 
@@ -36,7 +35,7 @@ export function wrapOgTitle(title: string, lineLength = 24, maxLines = 3) {
 export function ogImageOptions(
     title: string,
     description: string,
-    titleSize = 62,
+    titleSize = 54,
 ): OGImageOptions {
     return {
         title: wrapOgTitle(title),
@@ -55,7 +54,7 @@ export function ogImageOptions(
                 color: [25, 25, 24],
                 weight: "Bold",
                 lineHeight: 1.03,
-                families: ["Newsreader"],
+                families: ["Inter"],
             },
             description: {
                 size: 22,

@@ -1,6 +1,6 @@
 ---
 title: "NN/G Articles & Videos"
-description: "My work as Senior Experience Specialist and AI Lead at Nielsen Norman Group."
+description: "Research, explanations, and practical guidance on AI, UX, and decision-making."
 order: 40
 dateLabel: "Ongoing"
 startYear: 2023

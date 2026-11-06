@@ -1,7 +1,7 @@
 ---
 title: "Lemon"
-description: "An institutional AI agent for NN/G"
-order: 10
+description: "Putting AI design advice into practice through an institutional agent for NN/G."
+order: 20
 dateLabel: "2026–present"
 startYear: 2026
 heroImage: ./lemon/cover.jpg
@@ -11,9 +11,15 @@ draft: false
 
 Lemon is NN/G's institutional AI agent: a shared internal system that answers questions, retrieves organizational knowledge, and runs workflow automations across the company. I designed, built, and maintain it through AI-assisted development.
 
-Lemon's central product decision is simple: what if NN/G built an AI agent according to our own best practices? The result is a system of bounded workflow automations and a transparent, powerful institutional conversational agent.
+We give people advice about designing AI experiences. Building Lemon gives us a way to put that advice into practice and find out what we've missed, while making something useful for colleagues.
 
-The Lemon system is an ongoing project at NN/G, and contributes to our insights across our offerings.
+## Learning from a shared agent
+
+Lemon represents the organization, so its behavior needs to account for more than what one person wants it to do. A colleague might ask it to find information or change something in a shared system; the system needs to check what that person can access and whether the action requires approval.
+
+That has consequences for the interface. Someone needs to understand what Lemon proposes to do before approving it, and be able to check what happened afterward. I chose explicit permissions, human approvals, and a record of changes so those boundaries could be inspected.
+
+Working through those decisions informs my writing and teaching. The [Lemon Lessons](/blog/i-built-my-companys-institutional-ai-agent/) describe what we're learning as the project develops.
 
 ## The organizational problem
 
@@ -25,7 +31,7 @@ A useful system needed company context, but it also needed explicit limits, a vi
 
 I am Lemon's product owner, designer, builder, and operator. I work directly with my colleagues at NN/G to identify suitable problems, map the existing workflow, decide where AI is appropriate and where deterministic software is safer, define approval boundaries, and evaluate the result before release.
 
-I built Lemon without drawing on NN/G's small development team's roadmap. AI-assisted programming made that possible, but the important ownership remains human: I am responsible for the product decisions, permissions, evaluation criteria, documentation, rollout, and maintenance.
+NN/G's small development team was already working on other priorities. I used AI-assisted programming to implement Lemon, and I am responsible for deciding what it should do, checking the result, and maintaining it. That includes permissions, evaluation criteria, documentation, and rollout.
 
 ## What I built
 
@@ -36,24 +42,26 @@ Lemon has two main connected surfaces:
 
 ## Designing for trust
 
-I wasn't about to unleash an OpenClaw instance onto our organization's systems, which is why I decided on a centralized, org-owned agent over employee-owned individual agents. Lemon was also started in March 2026, a time when the ROI of AI agents wasn't clear, and trust had to be incrementally earned from the broader organization. I made some system-level decisions to earn my colleagues' trust.
+I chose a centralized, organization-owned agent with defined access to shared systems. As we introduced it to colleagues, I wanted its boundaries to be visible and testable. That led to several design decisions:
 
 - Read and write permissions are separate tool surfaces. In dry-run mode, write tools are structurally unavailable.
 - Ambiguous or consequential actions require human approval.
-- Every write produces a durable audit record naming the actor, trigger, action, and outcome.
+- Every write produces a durable audit record identifying the actor, trigger, action, and outcome.
 - Draft and private content are prevented from reaching inappropriate surfaces through code-level boundaries and tests.
 - Workflow rules and quality rubrics are owned by the colleagues responsible for that work and can be updated without rewriting the automation.
 - New workflows begin in dry-run, expose their proposed actions for review, and move to production only after stakeholder sign-off and evaluation.
 
 
-## Is it worth it?
+## What we're measuring
 
-Lemon is production software, which means it needs to earn its keep. Its current evidence base includes:
+Lemon needs to be useful in everyday work as well as informative to build. We track its use and limitations through:
 
 - More than 10 live automations working across all company business units
 - A knowledge library covering more than 1,800 published articles
 - A large automated test suite and structural checks around safety-critical boundaries
-- A usage ledger that tracks model cost, successful work, adoption, and estimated human-time displacement
+- A usage ledger that tracks model cost, successful work, adoption, and estimated time returned to colleagues
 - An internal dashboard that publishes capabilities, known gaps, costs, and measurement methodology to the organization
+
+Automation counts describe the system's scope; they don't establish how much time it saves. Time-return figures are estimates, and I keep those separate from recorded activity.
 
 You can read more about [why we built Lemon instead of buying an off-the-shelf agent](/blog/lemon-lessons-pt-2-why-we-didnt-just-download-an-agent/) and [how the project began](/blog/i-built-my-companys-institutional-ai-agent/).

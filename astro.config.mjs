@@ -44,15 +44,5 @@ export default defineConfig({
             weights: ['100 900'],
             styles: ['normal', 'italic'],
         },
-        {
-            // Newsreader — a soft, calm transitional serif designed for
-            // editorial long-form reading. Used for blog post body text;
-            // Inter stays in charge of UI and headings.
-            provider: fontProviders.google(),
-            name: 'Newsreader',
-            cssVariable: '--font-newsreader',
-            weights: ['200 800'],
-            styles: ['normal', 'italic'],
-        },
     ],
 });
