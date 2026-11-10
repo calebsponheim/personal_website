@@ -9,8 +9,8 @@ export async function GET() {
     const body = await generateOpenGraphImage(
         ogImageOptions(
             "Caleb Sponheim",
-            "APPLIED RESEARCH  /  AI  /  HUMAN BEHAVIOR",
-            78,
+            "AI research, experiments, and teaching",
+            70,
         ),
     );
 

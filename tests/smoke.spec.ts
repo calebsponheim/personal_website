@@ -11,6 +11,7 @@ test('important public routes respond successfully', async ({ page }) => {
     '/',
     '/about/',
     '/projects/',
+    '/projects/prove/',
     '/blog/',
     '/blog/i-built-my-companys-institutional-ai-agent/',
     '/rss.xml',
@@ -30,7 +31,7 @@ test('the home page exposes canonical and social metadata', async ({ page }) => 
   );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
-    /works in applied AI and UX/i,
+    /investigates emerging AI/i,
   );
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     'content',
@@ -69,19 +70,11 @@ test('the home page links a locally hosted resume and a direct mailto', async ({
   expect(response.headers()['content-type']).toContain('pdf');
 });
 
-test('the home page features one project and stays short', async ({ page }) => {
+test('the home page keeps posts and projects off the homepage', async ({ page }) => {
   await page.goto('/');
 
-  const featured = page.locator('.featured');
-  await expect(featured.getByRole('heading', { name: 'Lemon' })).toBeVisible();
-  await expect(
-    featured.getByRole('link', { name: /Read the case study/ }),
-  ).toHaveAttribute('href', '/projects/lemon/');
-
-  // The landing page deliberately carries no post or project lists — /blog
-  // and /projects own those. Only the nav links should point at them.
   await expect(page.locator('main a[href^="/blog"]')).toHaveCount(0);
-  await expect(page.locator('main a[href^="/projects/"]')).toHaveCount(1);
+  await expect(page.locator('main a[href^="/projects/"]')).toHaveCount(0);
 });
 
 test('unknown routes use the custom not-found page', async ({ page }) => {
@@ -101,7 +94,7 @@ test('the projects sort control reorders by date and is linkable', async ({ page
 
   // Server-rendered default is the hand-curated `order` sequence.
   await expect(control).toHaveValue('relevance');
-  await expect(titles.first()).toHaveText(/Lemon/);
+  await expect(titles.first()).toHaveText(/PROVE/);
 
   // Oldest-first must put the earliest `startYear` at the top.
   await control.selectOption('oldest');
@@ -111,7 +104,7 @@ test('the projects sort control reorders by date and is linkable', async ({ page
   // Newest-first ranks ongoing work above anything already finished.
   await control.selectOption('newest');
   await expect(titles.first()).toHaveText(/Lemon/);
-  await expect(titles.nth(3)).toHaveText(/Neuroscience Research/);
+  await expect(titles.nth(4)).toHaveText(/Neuroscience Research/);
 
   // Returning to relevance clears the param rather than leaving ?sort=relevance.
   await control.selectOption('relevance');

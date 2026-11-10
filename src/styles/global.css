@@ -25,12 +25,6 @@
     system-ui,
     -apple-system,
     sans-serif;
-  --font-serif:
-    var(--font-newsreader),
-    ui-serif,
-    Georgia,
-    "Times New Roman",
-    serif;
 }
 
 /* Dark palette follows the OS setting. Only the tokens change — no
@@ -87,19 +81,13 @@ main.prose-page > p,
 main.prose-page > ul,
 main.prose-page > ol,
 main.prose-page > blockquote {
-  font-family: var(--font-serif);
   font-size: 1.125rem;
   line-height: 1.7;
 }
 
 h1 {
-  /* Newsreader (the body serif) at regular weight. Its optical display
-     sizing makes large titles more delicate and higher-contrast than the
-     prose, unifying headings with long-form body while Inter keeps the UI.
-     The thin serif also pairs with the header logo's thin stroke. */
-  font-family: var(--font-serif);
   font-size: 2.25rem;
-  font-weight: 400;
+  font-weight: 650;
   margin: 0 0 1.5rem;
   letter-spacing: -0.02em;
   line-height: 1.2;

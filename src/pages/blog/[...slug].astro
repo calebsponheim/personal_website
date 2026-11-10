@@ -208,11 +208,8 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
     }
 
     /* Long-form reading typography. `:global()` is needed because the
-       Markdown-rendered HTML inside <Content /> isn't scoped by Astro.
-       Body switches to Newsreader (soft serif) for prose comfort while
-       Inter remains in charge of headings, captions, and UI elements. */
+       Markdown-rendered HTML inside <Content /> isn't scoped by Astro. */
     .post-body {
-        font-family: var(--font-serif);
         font-size: 1.125rem;
         line-height: 1.7;
     }
@@ -372,13 +369,10 @@ const readingMinutes = Math.max(1, Math.round(words / 225));
 
     .post-nav-label {
         font-size: 0.8rem;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
         color: var(--color-text-muted);
     }
 
     .post-nav-title {
-        font-family: var(--font-sans);
         font-size: 0.95rem;
         font-weight: 500;
         line-height: 1.35;

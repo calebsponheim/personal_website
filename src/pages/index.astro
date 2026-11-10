@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import portrait from "../assets/portrait.webp";
 // Home page prose lives in Markdown rather than in this component so the copy
@@ -11,28 +10,19 @@ import * as homepageCopy from "../copy/home.md";
 const RESUME_URL = "/resume/caleb-sponheim-resume.pdf";
 const EMAIL = "caleb.sponheim@gmail.com";
 
-const { availability, featuredSlug, featuredEyebrow, featuredBlurb } =
-    homepageCopy.frontmatter;
-
-// Only the featured project is pulled in — the home page deliberately stays
-// short, so /projects and /blog own the full lists. Same draft filter as
-// every other view of this collection.
-const projects = await getCollection("projects", ({ data }) => {
-    return import.meta.env.DEV || !data.draft;
-});
-const featured = projects.find((entry) => entry.id === featuredSlug) ?? null;
+const { availability } = homepageCopy.frontmatter;
 ---
 
 <Layout
-    title="Caleb Sponheim | Applied AI and UX"
-    description="Caleb Sponheim works in applied AI and UX, helping turn emerging technology into useful products, systems, and training."
+    title="Caleb Sponheim | AI Research, Experiments, and Teaching"
+    description="Caleb Sponheim investigates emerging AI and turns what he learns into experiments, practical frameworks, and teaching at NN/G."
 >
     <div class="home">
         <Image
             src={portrait}
             alt="Portrait of Caleb Sponheim"
             widths={[200, 400, 600]}
-            sizes="(min-width: 720px) 224px, 88px"
+            sizes="(min-width: 720px) 192px, 88px"
             class="portrait"
         />
 
@@ -44,220 +34,95 @@ const featured = projects.find((entry) => entry.id === featuredSlug) ?? null;
             </div>
 
             <p class="actions">
-                <a class="button" href={RESUME_URL}>See Caleb's resume →</a>
+                <a href={RESUME_URL}>See Caleb's resume</a>
             </p>
         </div>
     </div>
 
-    {
-        featured && (
-            <aside class="featured" aria-labelledby="featured-title">
-                <p class="eyebrow">{featuredEyebrow}</p>
-                <h2 id="featured-title">{featured.data.title}</h2>
-                <p>{featuredBlurb}</p>
-                <p class="featured-link">
-                    <a href={`/projects/${featured.id}/`}>
-                        Read the case study <span aria-hidden="true">→</span>
-                    </a>
-                </p>
-            </aside>
-        )
-    }
-
     <section class="contact" aria-labelledby="get-in-touch">
-        <h2 id="get-in-touch">Want to get in touch?</h2>
+        <h2 id="get-in-touch">Get in touch</h2>
         {availability && <p class="availability">{availability}</p>}
         <p>
-            Email me at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. I will respond
-            to messages that are a good match for my schedule and interests.
-            Thanks!
+            <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
         </p>
     </section>
 </Layout>
 
 <style>
-    /* Single column on narrow screens: putting the portrait in its own
-       column here squeezed the heading onto three lines and the prose to
-       ~28 characters. It stacks above the text instead. */
     .home {
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas:
-            "portrait"
-            "content";
-        gap: 1.25rem;
+        gap: 1rem;
         align-items: start;
+    }
+
+    .portrait {
+        width: 5.5rem;
+        height: 5.5rem;
+        object-fit: cover;
+        border-radius: 50%;
     }
 
     @media (min-width: 720px) {
         .home {
-            grid-template-columns: minmax(0, 1fr) 14rem;
+            grid-template-columns: minmax(0, 1fr) 12rem;
             grid-template-areas: "content portrait";
-            column-gap: 3rem;
+            gap: 3rem;
         }
-    }
 
-    /* The portrait used to be `display: none` below 720px, so the most-used
-       viewport never saw the face on a personal site. Keeping it displayed at
-       every width also fixes the old bug where the hidden grid item collapsed
-       its row but kept the 2rem `row-gap`, leaving 32px of phantom space
-       above the h1. */
-    .portrait {
-        grid-area: portrait;
-        width: 5.5rem;
-        height: 5.5rem;
-        object-fit: cover;
-        border-radius: 999px;
-    }
+        .content {
+            grid-area: content;
+        }
 
-    @media (min-width: 720px) {
         .portrait {
-            width: 12rem;
+            grid-area: portrait;
+            width: 100%;
             height: auto;
             border-radius: 0;
-            object-fit: fill;
-            justify-self: center;
         }
     }
 
-    .content {
-        grid-area: content;
+    h1 {
+        font-size: clamp(1.875rem, 4vw, 2.5rem);
+        margin-bottom: 1rem;
     }
 
-    /* --- Positioning statement --- */
-
-    /* The lede runs large and serif; the credential bullets drop to sans at
-       UI scale so they read as supporting evidence, not more prose. */
     .proposition {
-        font-family: var(--font-serif);
-        font-size: clamp(1.35rem, 2.5vw, 1.75rem);
-        line-height: 1.35;
         max-width: var(--prose-width);
-    }
-
-    .proposition :global(p) {
-        margin-bottom: 1.5rem;
-    }
-
-    .proposition :global(ul) {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.45rem 1.25rem;
-        color: var(--color-text-muted);
-        font-family: var(--font-sans);
-        font-size: 0.9rem;
-        line-height: 1.6;
-    }
-
-    @media (max-width: 520px) {
-        .proposition :global(ul) {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .proposition :global(ul li) {
-        position: relative;
-        padding-left: 0.8rem;
-    }
-
-    /* Custom dot marker — `list-style: none` above drops the default so the
-       two-column grid can control alignment. */
-    .proposition :global(ul li::before) {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0.65em;
-        width: 0.25rem;
-        height: 0.25rem;
-        border-radius: 50%;
-        background: var(--color-link);
+        font-size: 1.125rem;
     }
 
     .actions {
-        margin: 1.75rem 0 0;
-    }
-
-    .button {
-        display: inline-flex;
-        align-items: center;
-        min-height: 44px;
-        padding: 0 1.125rem;
-        border-radius: 0.5rem;
-        background: var(--color-link);
-        color: var(--color-bg);
-        font-weight: 500;
-        text-decoration: none;
-    }
-
-    .button:hover {
-        /* Darken via the text color rather than a second brand token —
-           keeps the palette to one accent. */
-        background: var(--color-text);
-    }
-
-    /* --- Featured project --- */
-
-    .featured {
-        margin-top: 3rem;
-        padding: 1.25rem 1.5rem;
-        border: 1px solid var(--color-border);
-        /* Accent rule on the leading edge marks this as the one promoted
-           item without needing a filled background. */
-        border-left: 3px solid var(--color-link);
-        border-radius: 0 0.5rem 0.5rem 0;
-        max-width: var(--prose-width);
-    }
-
-    .eyebrow {
-        margin: 0 0 0.25rem;
-        color: var(--color-text-muted);
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-    }
-
-    .featured h2 {
-        font-family: var(--font-serif);
-        font-size: 1.4rem;
-        font-weight: 500;
-        margin: 0 0 0.35rem;
-    }
-
-    .featured p {
-        margin: 0 0 0.65rem;
-    }
-
-    .featured-link {
         margin: 0;
     }
 
-    /* --- Contact --- */
+    .actions a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
 
     .contact {
-        margin-top: 2.5rem;
-        padding: 1.5rem;
-        background: var(--color-surface);
-        border-radius: 0.75rem;
         max-width: var(--prose-width);
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--color-border);
     }
 
     .contact h2 {
         margin: 0 0 0.5rem;
-        font-size: 1.05rem;
+        font-size: 1.25rem;
         font-weight: 600;
     }
 
-    .availability {
+    .contact p {
         margin: 0 0 0.75rem;
-        color: var(--color-text-muted);
-        font-size: 0.95rem;
     }
 
     .contact p:last-child {
         margin: 0;
+    }
+
+    .contact a {
+        overflow-wrap: anywhere;
     }
 </style>
