@@ -31,7 +31,7 @@ test('the home page exposes canonical and social metadata', async ({ page }) => 
   );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
-    /investigates emerging AI/i,
+    /leads AI work at Nielsen Norman Group/i,
   );
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     'content',

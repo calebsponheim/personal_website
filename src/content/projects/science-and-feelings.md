@@ -12,46 +12,26 @@ draft: false
 
 I had an existential crisis after passing my qualifying exam during my PhD, so like any white guy, I made a podcast about it where I talked to my friends about themselves.
 
-Eight episodes came out over about four months in 2018, each one a conversation with a fellow scientist about the parts of the job nobody puts in the abstract — competitiveness, doubt, why we picked this in the first place. Here they are, in order.
+Over four months in 2018, I recorded eight conversations about the parts of science nobody puts in the abstract, like competitiveness, doubt, and why we picked this work in the first place.
 
 ## Episodes
 
 ### 1. "I'm going to do this, and f*** all of you"
 **September 10, 2018**
 
-So, this is new!
-
 Welcome to Science and Feelings, a place to have my favorite types of conversations: open, heartfelt, nerdy, and helpful.
-
-This auditory home will change, twist, and morph while I learn how to make things fun and interesting to listen to.
-
-Feedback? Great. Find me in person, or email me at "caleb [dot] sponheim [at] gmail [dot] com".
-
-Learn more about me at calebsponheim.com
-
-More to come! Sit tight.
 
 ### 2. "Hey, you're pretty good at this."
 **September 24, 2018**
 
-Hey, friends. I'm talking to my friend and colleague JD, and we spout a lot of platitudes.
+My friend and colleague JD joins me to talk about competition between friends in science.
 
 As I say in the intro, I felt eerily similar to JD for a while, so much that I felt frustrated and competitive when we were in the same room. I've since moved on (I think), and as we settle into our lives as scientists, I want to remain his friend.
-
-Feedback? Great. Find me in person, or email me at "caleb [dot] sponheim [at] gmail [dot] com"
-
-More to come!
 
 ### 3. Running on possum time
 **October 8, 2018**
 
-Hi! Kelsey and I talk a lot about bones, possums, robots, and vulnerability in this episode.
-
-If you like these episodes so far, please recommend them to someone you think would also enjoy it. Thanks!
-
-If you have suggestions about how to make this podcast a better experience, please tell me! Find me in person, or email me at caleb [dot] sponheim [at] gmail [dot] com.
-
-As always, more to come in two weeks. Bye!
+Kelsey and I talk about bones, possums, robots, and vulnerability.
 
 ### 4. Science is a Pyramid Scheme
 **October 22, 2018**
@@ -60,26 +40,14 @@ As always, more to come in two weeks. Bye!
 - [JP's Lab](https://sites.google.com/site/prendergastlab/)
 - [Satchin Panda on 10-hour Diets](https://www.cell.com/cell-metabolism/fulltext/S1550-4131%2818%2930505-9)
 
-We didn't do a great job of explaining the Platt method, so [here's a link to the Wikipedia article](https://en.wikipedia.org/wiki/Strong_inference).
-
-If you like the episodes, please recommend them to someone you think would also enjoy it. Thanks!
-
-If you have suggestions about how to make this podcast a better experience, please tell me! Find me in person, or email me at caleb [dot] sponheim [at] gmail [dot] com.
-
-More to come in two weeks. Bye!
+For more on the Platt method, see [strong inference](https://en.wikipedia.org/wiki/Strong_inference).
 
 ### 5. "I've gone to the dark side"
 **November 5, 2018**
 
 - [NIH IRTA Postbac program](https://www.training.nih.gov/trainees/postbacs)
 
-Julian is a great person to talk to because he immediately dives deep into the existential questions of science. He has thought so much about how his work and his science fits into the broader picture. His poetry, philosophy, and neuroscience background combine to make him really effective at what he does. Also, in this episode, he recommends that everyone take a metaethics philosophy course!
-
-If you like the episodes, please recommend them to someone you think would also enjoy it. Thanks!
-
-If you have suggestions about how to make this podcast a better experience, please tell me! email me at caleb [dot] sponheim [at] gmail [dot] com.
-
-Get ready for another episode, in two weeks! Talk to you then.
+Julian draws on poetry, philosophy, and neuroscience to talk about where his work fits in his life. He recommends that everyone take a course in metaethics.
 
 ### 6. The Hotel with Infinite Rooms
 **November 19, 2018**
@@ -91,10 +59,6 @@ Get ready for another episode, in two weeks! Talk to you then.
 - [Emily Yoon](https://emily-yoon-poetry.tumblr.com/bio) ; [Emily Yoon's new book](https://www.harpercollins.com/9780062843685/a-cruelty-special-to-our-species/)
 - [Joan Didion - Slouching Towards Bethlehem](http://essaysspring13.qwriting.qc.cuny.edu/files/2013/04/Joan-Didion-Goodbye-to-All-That.pdf) ; [The quote Yuqing referenced](https://www.goodreads.com/quotes/825645-of-course-it-might-have-been-some-other-city-had)
 
-If you like the episodes, please recommend the show to someone you think would also enjoy it.
-
-If you have suggestions, email me at caleb [dot] sponheim [at] gmail [dot] com.
-
 ### 7. Priorities w/ Jessy Morgan
 **December 3, 2018**
 
@@ -103,10 +67,6 @@ If you have suggestions, email me at caleb [dot] sponheim [at] gmail [dot] com.
 - [Jessy's Other Lab](http://mgcb.bsd.uchicago.edu/faculty/greenberg/index.html)
 - [A picture of an Aphid Stylet (what Jessy's work is trying to mimic)](https://natureofscienceib.files.wordpress.com/2018/02/phloem-sap.jpg)
 
-If you have suggestions for this series, you can find my email on my website.
-
-Ok Bye!
-
 ### 8. The end of the world, and this podcast
 **December 17, 2018**
 
@@ -114,8 +74,6 @@ Ok Bye!
 - [YCombinator's call for carbon renewal technologies](http://carbon.ycombinator.com/)
 - [DESERT FLOODING](http://carbon.ycombinator.com/desert-flooding/)
 
-Thanks for listening. If you like this and want to hear more, drop me a line; I'm always happy to chat.
-
 ---
 
-Want to listen? You can download the full archived set — all eight episodes as MP3s — from Dropbox: https://www.dropbox.com/scl/fo/5pb0ahu0ub3czi913ut2m/ADvv82j8MMOzc3Oai_m3ULA?rlkey=mrjsj0kyvov9hoig8a60cf7yl&dl=0
+[Download all eight episodes as MP3s from Dropbox](https://www.dropbox.com/scl/fo/5pb0ahu0ub3czi913ut2m/ADvv82j8MMOzc3Oai_m3ULA?rlkey=mrjsj0kyvov9hoig8a60cf7yl&dl=0). If you’d like to talk about the show, [email me](mailto:caleb.sponheim@gmail.com).

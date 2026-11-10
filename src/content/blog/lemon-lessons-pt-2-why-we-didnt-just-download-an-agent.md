@@ -1,77 +1,45 @@
 ---
-title: "Lemon Lessons Pt 2: Why We Didn't Just Download an Agent"
+title: "Lemon Lessons, Part 2: Why We Didn't Just Download an Agent"
 heroImage: ./lemon-lessons-pt-2-why-we-didnt-just-download-an-agent/cover.png
 heroImageAlt: "Halftone black-and-white illustration of a citrus reamer beside a lemon"
 pubDate: 2026-06-03
-description: "We built our institutional AI from scratch instead of buying one off the shelf. It's not just because we think we're special; it was also to build trust in our first AI agent."
+description: "Why we built our own agent at NN/G, and how we tested what it could do before giving it access to shared systems."
 author: "Caleb Sponheim"
 tags: ["AI", "lemon"]
 ---
 
-You might have read about [Lemon, NN/G’s institutional AI agent,](/blog/i-built-my-companys-institutional-ai-agent/) and thought: *why didn’t they just use an off-the-shelf tool? Why build from scratch? OpenCLAW???*
+I said no, to my boss, twice. First, [Kate](https://substack.com/@katemmoran) had to talk me into building [Lemon, NN/G’s internal AI agent](/blog/i-built-my-companys-institutional-ai-agent/). Even after I agreed, I wasn’t about to turn a personal agent loose on NN/G’s Slack or Notion (or God forbid our CMS).
 
-Okay, yes, I considered it. It wasn’t the right choice for us.
-
-The beginning of Lemon was a bit embarrassing! I said no, to my boss, twice. First, [Kate](https://substack.com/@katemmoran) had to bully me into building anything at all. And, even once I’d agreed, I still felt very strongly that I wasn’t about to take a personal AI agent and turn it loose on NN/G’s Slack or Notion (or god forbid our CMS). In March 2026, the whirlwind around OpenCLAW and its cousins was genuinely *interesting*, but **I needed to figure out if an AI agent built for one person could serve a company.**
-
-Let me be fair to the off-the-shelf agent first, because the appeal is real. If you’re a small team (like us; I think at last count, we’re still under 50 people), and your dev team is fully booked on mission-critical work, the pitch of a simple install is very attractive. Instead of spending weeks on development, I could drop in a capable agent, hand it the keys to my tools, and let it figure the rest out? Great!
-
-For a single person managing their own stuff, personal agents like Hermes, OpenCLAW (there are others) can be pretty great at what they do (within limits).
-
-But that’s the thing. They’re great at being *one person’s* agent, working on *one person’s* stuff. That turns out to be a completely different job than the one I needed done.
+In March 2026, when people were trying out OpenClaw and other personal agents, I understood the appeal. Our developers were already booked, and installing an agent sounded quicker than spending weeks building one. I needed to find out whether an agent built around one person’s permissions and preferences could serve a company.
 
 ## An institution’s agent has a different job
 
-Start with who the agent belongs to.
+A personal agent belongs to you. It runs on your permissions, it answers to you, it optimizes for what you want.
 
-A personal agent belongs to you. It runs on your permissions, it answers to you, it optimizes for what you want. That’s a good and correct mental model for a personal AI agent, even one that helps you accomplish your professional work.
+Lemon works for NN/G. If a colleague asks it to make a change in a shared system, it has to check what that person can do and whose approval it needs. I wanted colleagues to be able to see what Lemon was allowed to do and check what it had done.
 
-An institutional agent can’t belong to anyone. Lemon doesn’t favor the person who summoned it in a chatbox or Notion comment. It represents the organization: our information, our protocols, our policies, our values, our people. When you message it, it isn’t trying to make *you* happy; it’s trying to be right on behalf of the whole company.
+## How we tested new features
 
-You can’t satisfy that institutional goal by taking a personal agent and pointing it at company systems. Personal agents are built to maximize and emphasize *capability*, with more tools, more autonomy, more speed.
+I used AI-assisted programming to build Lemon. I decided what each feature should do and how to test it before colleagues could use it.
 
-An institutional agent has to be built to maximize *trust*. Almost every design decision in Lemon is a deliberate vote for trust first, and capability second.
+I’d run each new feature in a test environment that could show me what it would change without making those changes. I’d review the proposed actions for a week before giving the feature permission to write to a real system.
 
-## We built it carefully, on purpose
+In the first couple of months, the failures I saw were small. Lemon handles internal tasks like looking up information and running small automations. That limited scope matters when something goes wrong.
 
-So how do you actually build for trust? Slowly, and on purpose. This is the part I’m proudest of, if I do say so myself.
+- **Test before granting write access.** A new feature can propose changes during testing. It can only make them once I’ve reviewed the proposals and granted access.
+- **Filter unpublished drafts in code.** The code filters drafts before they can reach a log, a message, or an email. Even I don’t get to see drafts by default.
+- **Record every change.** When Lemon changes something, it writes to a ledger and pings me.
 
-Every capability in Lemon got built the same way. I’m not an engineer; I didn’t hand-write most of this code. This is AI-assisted programming, with me deciding what’s being built and why. What was *entirely* mine was the caution. An AI left to its own enthusiasm optimizes for capability. Coding agents will happily hand you something fast, powerful, and completely unguarded, untested, and insecure.
+## Reviewing the code
 
-So, I’d develop a new feature, then test it in a hardcoded environment where it physically *couldn’t change anything* — it could only show me what it *would* do. I’d watch those would-be actions for a week. Only once it had earned my trust, would I let it actually touch a real system.
+Over those first few months, I ran more than half a dozen reviews of Lemon’s security, architecture, and technical debt. For some reviews, I used a second AI tool to check the first tool’s findings.
 
-Have things gone wrong? Of course they have. But nothing catastrophic. In my memory, across a couple of months of a non-engineer building tens of thousands of lines of working software, the failures have been small. I don’t *think* it’s luck. It’s the direct result of building to *prevent* problems rather than putting out fires. I’ll also be the first to admit that the work Lemon does is *small*: little automations here and there, information gathering. It’s not running public-facing... anything.
-
-I’ll highlight a couple of guardrails:
-
-- **Sandboxed pilot testing.** Any new feature literally cannot write to any database or system until I’ve watched it long enough to trust it.
-
-- **Some walls are built so I can’t forget them.** Unpublished draft content (part of NN/G’s real value) gets hidden before it can reach a log, a message, or an email, and that rule is enforced by the code itself, not by Lemon remembering to be careful. (Even I don’t get to see content drafts by default.)
-
-- **Everything gets written down.** Every change any part of Lemon makes lands in a ledger, and it pings me.
-
-An off-the-shelf autonomous agent typically skips all of this. Pointing OpenCLAW at your company’s systems is, fundamentally, a bet that you won’t land on “Catastrophe”.
-
-## “So Lemon is flawless?”
-
-No. Please don’t read any of this as a victory lap.
-
-What I’ll claim instead is that I keep *looking* for the flaws. Over the past couple of months I’ve run a whole stack of self-reviews against Lemon’s own code: adversarial security reviews, architecture reviews, tech-debt audits. More than half a dozen of them, some run through more than one AI tool so they’d check each other’s work. The entire point of each one was the same: go hunting for weaknesses before something goes wrong.
-
-And they find things! Good. That’s what they’re for. I would much rather discover a gap myself, on a quiet Tuesday, than have it surprise me on a Friday evening.
-
-Lemon’s flaws tend to be small, findable, and contained, instead of catastrophic and silent, because we keep going to look for them.
+The reviews found gaps. I’d much rather discover one on a quiet Tuesday than have it surprise me on a Friday evening.
 
 ## A note for everyone else building this stuff
 
-I’m a non-engineer who ended up building load-bearing software. If you’re wiring an autonomous agent into something your company actually depends on, you might be in the same boat. We can do better, and it’s genuinely not that hard.
+I’m a non-engineer who ended up building load-bearing software. If you’re building something your company will depend on, test it somewhere it can’t make changes. Review what it proposes to do, and decide which actions need someone’s approval before you let it use a shared system.
 
-Build AI in a sandbox before you let it touch anything real. Read the changes before you ship them. Let the thing ask for permission instead of assuming forgiveness. All of this is why a company of fewer than 50 people lets Lemon into its shared knowledge, and why it hasn’t blown up in our faces.
-
-## So, why not OpenCLAW?
-
-If you’re bringing AI into an organization, I’d gently suggest you stop asking how *capable* the agent is, and start asking how *legible* and how *bounded* it is. You can buy capability off a shelf. But trust has to be built naturally — and, respectfully, you can’t buy that.
-
-That’s the whole reason we didn’t just download an agent. We took the slow, careful, somewhat-anxious path on purpose, so that when we tell you what we’ve learned about building AI responsibly, we’ll have actually done it. That’s the point of Lemon. It’s the point of these Lemon Lessons, too.
+Those were the conditions I needed to meet before giving Lemon access to NN/G’s systems. Building our own agent let me make them part of the design from the start.
 
 Measure twice, squeeze once.
