@@ -1,6 +1,6 @@
 ---
 title: "PROVE"
-description: "A practical framework for deciding whether an AI tool helps with a specific task."
+description: "A way to test whether an AI tool is worth using for a specific task."
 order: 10
 dateLabel: "2026"
 startYear: 2026
@@ -14,9 +14,9 @@ I developed PROVE at NN/G to help practitioners evaluate those tradeoffs. It tes
 
 ## What I tested
 
-For the [published walkthrough](https://www.nngroup.com/articles/prove-framework/), I tried using an AI notebook tool to prepare an editorial digest for colleagues. I already did that work myself, which gave me something to compare the tool's output against.
+For the [published walkthrough](https://www.nngroup.com/articles/prove-framework/), I used Gemini Notebooks to draft the weekly research digest I post in Slack. I gave it the same sources I’d used for a digest I’d already written.
 
-Producing a draft was only part of the task. I also needed to judge its quality and account for the work of reviewing and correcting it. A faster first draft would be useful only if the whole process was worth the effort.
+The draft got the facts right, but it read like a report. My first run took a little over 10 minutes with some editing, compared with about 25 minutes by hand. That was enough to justify a one-month trial to see whether the time savings held up week to week.
 
 ## The framework
 
@@ -28,8 +28,6 @@ PROVE brings five considerations into that decision:
 - **Velocity:** Account for the whole process, including review and rework.
 - **Experience:** Consider the friction of using it repeatedly.
 
-The recommendation is provisional. One trial can help you decide what to investigate next; it doesn't establish that the tool will work across an organization or remain useful as the work changes.
-
-I like this kind of research because the question has a consequence: someone needs to decide what to do. Developing a framework means making the reasoning clear enough that they can try it with their own work and question the result.
+A trial can guide your next decision about that tool and task. Test again when the work changes or you want to use the tool somewhere else.
 
 Read [How to Decide When an AI Tool Is Worth Keeping](https://www.nngroup.com/articles/prove-framework/) for the worked example and the framework's limitations.

@@ -1,6 +1,6 @@
 ---
 title: "NN/G Articles & Videos"
-description: "Research, explanations, and practical guidance on AI, UX, and decision-making."
+description: "My NN/G articles and videos on AI behavior, UX research, and statistics."
 order: 40
 dateLabel: "Ongoing"
 startYear: 2023

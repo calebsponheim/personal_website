@@ -1,5 +1,7 @@
 ---
-availability: "I’m open to conversations about AI research, experimentation, and education, especially new AI experiences and technology that addresses climate change."
+availability: I’m open to conversations about AI experiences and technology that addresses climate change.
 ---
 
-I research emerging AI and experiment with how people can use it. As AI Lead at [NN/G](https://www.nngroup.com/people/caleb-sponheim/), I teach [Designing AI Experiences](https://www.nngroup.com/courses/designing-ai-experiences/) and build tools like Lemon, our internal AI agent.
+I lead AI initiatives at [Nielsen Norman Group](https://www.nngroup.com/people/caleb-sponheim/), a user experience research and training company. I teach people how to design products that use AI, and I conduct research on AI capabilities.
+
+I also built and manage NN/G's institutional AI agent and internal automation platform.

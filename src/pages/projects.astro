@@ -17,7 +17,7 @@ const projects = (
 const ONGOING = 9999;
 
 const SORTS = [
-    { value: "relevance", label: "Relevance" },
+    { value: "relevance", label: "Curated order" },
     { value: "newest", label: "Date (newest first)" },
     { value: "oldest", label: "Date (oldest first)" },
 ];
@@ -25,14 +25,14 @@ const SORTS = [
 
 <Layout
     title="Projects · Caleb Sponheim"
-    description="Research, experiments, frameworks, and teaching across AI, UX, and neuroscience."
+    description="Projects by Caleb Sponheim, including an internal AI agent, courses for UX practitioners, neuroscience research, and light installations."
 >
     <h1>Projects</h1>
 
     <p class="lede">
-        Here's some of my work, from investigating AI tools to teaching courses and building interactive art. See my <a
-            href="/resume/caleb-sponheim-resume.pdf">resume</a
-        > for a more complete view.
+        Selected work in AI, teaching, neuroscience, and interactive art. <a
+            href="/resume/caleb-sponheim-resume.pdf">View résumé</a
+        >.
     </p>
 
     {
@@ -155,10 +155,10 @@ const SORTS = [
                 key(a, "order") - key(b, "order"),
         };
 
-        const labels: Record<string, string> = {
-            relevance: "Relevance",
-            newest: "Date, newest first",
-            oldest: "Date, oldest first",
+        const sortAnnouncements: Record<string, string> = {
+            relevance: "Projects shown in curated order.",
+            newest: "Projects sorted by date, newest first.",
+            oldest: "Projects sorted by date, oldest first.",
         };
 
         function apply(name: string, announce: boolean) {
@@ -173,7 +173,8 @@ const SORTS = [
             list!.appendChild(fragment);
 
             if (announce && status) {
-                status.textContent = `Projects sorted by ${labels[name] ?? name}.`;
+                status.textContent =
+                    sortAnnouncements[name] ?? sortAnnouncements.relevance;
             }
         }
 
